@@ -1,10 +1,5 @@
-import type { Dispatch, SetStateAction } from "react";
 
-const Login = ({
-  setScreen,
-}: {
-  setScreen: Dispatch<SetStateAction<"login" | "register">>;
-}) => {
+const Login = () => {
   return <div>Login</div>;
 };
 

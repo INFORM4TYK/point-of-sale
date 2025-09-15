@@ -18,7 +18,8 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.62.0",
     "react-is": "^18.3.1",
-    "react-router-dom": "^7.9.1"
+    "react-router-dom": "^7.9.1",
+    "sass": "^1.92.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
