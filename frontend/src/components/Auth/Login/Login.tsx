@@ -1,18 +1,42 @@
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 type LoginFormInputs = {
   email: string;
   password: string;
 };
 const Login = () => {
+  const router = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log("Form data:", data);
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      const res = await fetch("http://localhost:5001/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        console.log("Login successful:", result);
+        localStorage.setItem("token", result.data.token);
+        router("/dashboard");
+      } else {
+        console.error("Login failed:", result.message);
+        alert(result.message);
+      }
+    } catch (err) {
+      console.error("Error logging in:", err);
+      alert("Błąd serwera, spróbuj ponownie.");
+    }
   };
   return (
     <section className="w-full h-screen grid place-items-center px-4">
