@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useLoading from "../../../hooks/useLoading";
+import useError from "../../../hooks/useError";
 type LoginFormInputs = {
   email: string;
   password: string;
@@ -9,7 +10,7 @@ type LoginFormInputs = {
 const Login = () => {
   const router = useNavigate();
   const { startLoading, loading } = useLoading();
-
+  const { error, dispatchError } = useError();
   const {
     register,
     handleSubmit,
@@ -17,6 +18,7 @@ const Login = () => {
   } = useForm<LoginFormInputs>();
 
   const onSubmit = async (data: LoginFormInputs) => {
+    dispatchError({ type: "reset" });
     const stopLoading = startLoading();
     try {
       const res = await fetch("http://localhost:5001/api/auth/login", {
@@ -30,14 +32,13 @@ const Login = () => {
       const result = await res.json();
 
       if (res.ok) {
-        console.log("Login successful:", result);
         localStorage.setItem("token", result.data.token);
         router("/dashboard");
       } else {
-        console.error("Login failed:", result.message);
+        dispatchError({ type: "auth/invalid-credentials" });
       }
     } catch (err) {
-      console.error("Error logging in:", err);
+      dispatchError({ type: "server/error" });
     } finally {
       stopLoading();
     }
@@ -52,6 +53,7 @@ const Login = () => {
         </div>
       </div>
       <form
+        noValidate
         onSubmit={handleSubmit(onSubmit)}
         className="z-50 flex flex-col gap-4 bg-white w-full max-w-[500px] px-8 py-4 pt-6 rounded-xl shadow-lg border-2"
       >
@@ -84,7 +86,7 @@ const Login = () => {
           error={!!errors.password}
           helperText={errors.password?.message}
         />
-
+        <p className="text-center text-danger">{error && error}</p>
         <Button
           disabled={loading}
           loading={loading}
