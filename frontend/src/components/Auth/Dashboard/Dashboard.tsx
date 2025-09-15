@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useLoading from "../../../hooks/useLoading";
 
 type User = {
   id: number;
@@ -8,11 +9,11 @@ type User = {
 
 const DashboardContent = () => {
   const router = useNavigate();
+  const { startLoading, loading } = useLoading();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchUser = async () => {
-      setLoading(true);
+      const stopLoading = startLoading();
       const token = localStorage.getItem("token");
       if (!token) return;
 
@@ -25,10 +26,10 @@ const DashboardContent = () => {
         if (!res.ok) throw new Error("Failed to fetch user");
         const data = await res.json();
         setUser(data.data);
-        setLoading(false);
       } catch (err) {
-        setLoading(false);
         console.error(err);
+      } finally {
+        stopLoading();
       }
     };
 

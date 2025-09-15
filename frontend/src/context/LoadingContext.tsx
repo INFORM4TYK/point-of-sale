@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import type { ReactNode } from "react";
 export interface LoadingContextType {
   startLoading: () => () => void;
-  loading: string[];
+  loading: boolean;
   startLoadingSilent: () => () => void;
-  loadingSilent: string[];
+  loadingSilent: boolean;
 }
 
 export const LoadingContext = createContext<LoadingContextType | null>(null);
@@ -33,9 +33,9 @@ const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       startLoading,
-      loading,
+      loading: loading.length > 0,
       startLoadingSilent,
-      loadingSilent,
+      loadingSilent: loading.length > 0,
     }),
     [loading, loadingSilent]
   );
