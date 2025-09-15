@@ -22,20 +22,28 @@ describe("Protected endpoint", () => {
 
     token = res.body.data.token;
   });
+ it("should deny access with wrong token", async () => {
+  const fakeToken = '123123'
+    const res = await request(app)
+      .get("/api/auth/me")
+      .set("Authorization", `Bearer ${fakeToken}`);
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message", "Invalid token");
+  });
 
   it("should deny access without token", async () => {
-    const res = await request(app).get("/api/protected");
+    const res = await request(app).get("/api/auth/me");
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty("message", "Unauthorized");
   });
 
   it("should allow access with valid token", async () => {
     const res = await request(app)
-      .get("/api/protected")
+      .get("/api/auth/me")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("message", "Protected data accessed");
+    expect(res.body).toHaveProperty("message", "User fetched successfully");
   });
 
   afterAll(async () => {

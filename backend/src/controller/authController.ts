@@ -39,8 +39,9 @@ export const getCurrentUser = async (
   try {
     const userId = req.userId; 
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
-
+    
     const user = await getUser(userId);
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
     handleResponse(res, 200, "User fetched successfully", user);
   } catch (err) {
     next(err);
