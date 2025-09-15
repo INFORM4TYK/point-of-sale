@@ -6,14 +6,14 @@ import useAuth from "../../../hooks/useAuth";
 const DashboardContent = () => {
   const router = useNavigate();
   const { loading } = useLoading();
-  const { currentUser } = useAuth();
+  const { currentUser, loadingUser } = useAuth();
 
   useEffect(() => {
-    if (!loading && !currentUser) {
+    if (!loadingUser && !loading && !currentUser) {
       router("/auth", { replace: true });
     }
-  }, [loading, currentUser]);
-  
+  }, [loadingUser, loading, currentUser]);
+
   if (loading && !currentUser) return;
   if (!loading && !currentUser) {
     return null;

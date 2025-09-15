@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { registerUser, loginUser } from "../services/authService";
 import handleResponse from "../utils/handleReponse";
 import { getUser } from "../models/userModel";
+import { HttpError } from "../utils/httpError";
 
 export const register = async (
   req: Request,
@@ -37,11 +38,11 @@ export const getCurrentUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.userId; 
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
-    
+    const userId = req.userId;
+    if (!userId) throw new HttpError(401, "Unauthorized");
+
     const user = await getUser(userId);
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    if (!user) throw new HttpError(401, "Unauthorized");
     handleResponse(res, 200, "User fetched successfully", user);
   } catch (err) {
     next(err);

@@ -29,7 +29,6 @@ const Login = () => {
       return;
     }
   }, [currentUser]);
-  if (loading) return;
   return (
     <section className="w-full h-screen grid place-items-center px-4">
       <div className="h-1/2 w-full bg-primary absolute top-0 pattern-bg">

@@ -1,4 +1,4 @@
-import DashboardContent from "../../components/Auth/Dashboard/Dashboard";
+import DashboardContent from "../../components/Auth/Dashboard/DashboardContent";
 
 const Dashboard = () => {
   return <DashboardContent />;
