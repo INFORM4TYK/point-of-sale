@@ -1,11 +1,5 @@
 import pool from "../config/db";
 
-export interface User {
-  id?: number;
-  name: string;
-  email: string;
-  password: string;
-}
 
 export const createUserService = async (email: string, password: string) => {
   const result = await pool.query(
