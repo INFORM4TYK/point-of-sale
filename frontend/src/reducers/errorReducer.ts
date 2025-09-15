@@ -5,12 +5,15 @@ export type ErrorAction =
   | { type: "reset" }
   | { type: "auth/invalid-credentials" }
   | { type: "auth/invalid-password" }
+  | { type: "auth/user-not-found" }
   | { type: "server/error" };
 
 const errorReducer = (state: ErrorState, action: ErrorAction): ErrorState => {
   switch (action.type) {
     case "reset":
       return (state = { error: "" });
+    case "auth/user-not-found":
+      return (state = { error: "Brak użytkownika z podanym adresem e-mail." });
     case "auth/invalid-credentials":
       return (state = { error: "Podane dane logowania są nie prawidłowe." });
     case "auth/invalid-password":

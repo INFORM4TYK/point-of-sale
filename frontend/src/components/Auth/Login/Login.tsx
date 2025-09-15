@@ -1,48 +1,35 @@
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import useLoading from "../../../hooks/useLoading";
 import useError from "../../../hooks/useError";
+import useAuth from "../../../hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 type LoginFormInputs = {
   email: string;
   password: string;
 };
 const Login = () => {
+  const { login, currentUser } = useAuth();
   const router = useNavigate();
-  const { startLoading, loading } = useLoading();
-  const { error, dispatchError } = useError();
+  const { loading } = useLoading();
+  const { error } = useError();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-
-  const onSubmit = async (data: LoginFormInputs) => {
-    dispatchError({ type: "reset" });
-    const stopLoading = startLoading();
-    try {
-      const res = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", result.data.token);
-        router("/dashboard");
-      } else {
-        dispatchError({ type: "auth/invalid-credentials" });
-      }
-    } catch (err) {
-      dispatchError({ type: "server/error" });
-    } finally {
-      stopLoading();
-    }
+  const onSubmit = async (data: { email: string; password: string }) => {
+    await login(data);
   };
+  
+  useEffect(() => {
+    if (currentUser) {
+      router("/dashboard", { replace: true });
+      return;
+    }
+  }, [currentUser]);
+  if (loading) return;
   return (
     <section className="w-full h-screen grid place-items-center px-4">
       <div className="h-1/2 w-full bg-primary absolute top-0 pattern-bg">
@@ -82,6 +69,7 @@ const Login = () => {
           }}
           label="Hasło"
           type="password"
+          autoComplete="new-password"
           {...register("password", { required: "Hasło jest wymagane" })}
           error={!!errors.password}
           helperText={errors.password?.message}

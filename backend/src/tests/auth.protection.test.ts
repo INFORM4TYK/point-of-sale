@@ -11,10 +11,10 @@ describe("Protected endpoint", () => {
   beforeAll(async () => {
     const hashedPassword = await bcrypt.hash(testPassword, 10);
 
-    await pool.query(
-      `INSERT INTO users (email, password) VALUES ($1, $2)`,
-      [testEmail, hashedPassword]
-    );
+    await pool.query(`INSERT INTO users (email, password) VALUES ($1, $2)`, [
+      testEmail,
+      hashedPassword,
+    ]);
 
     const res = await request(app)
       .post("/api/auth/login")
@@ -22,8 +22,8 @@ describe("Protected endpoint", () => {
 
     token = res.body.data.token;
   });
- it("should deny access with wrong token", async () => {
-  const fakeToken = '123123'
+  it("should deny access with wrong token", async () => {
+    const fakeToken = "123123";
     const res = await request(app)
       .get("/api/auth/me")
       .set("Authorization", `Bearer ${fakeToken}`);
