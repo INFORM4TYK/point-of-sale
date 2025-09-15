@@ -1,12 +1,15 @@
 import { Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import useLoading from "../../../hooks/useLoading";
 type LoginFormInputs = {
   email: string;
   password: string;
 };
 const Login = () => {
   const router = useNavigate();
+  const { startLoading, loading } = useLoading();
+
   const {
     register,
     handleSubmit,
@@ -14,6 +17,7 @@ const Login = () => {
   } = useForm<LoginFormInputs>();
 
   const onSubmit = async (data: LoginFormInputs) => {
+    const stopLoading = startLoading();
     try {
       const res = await fetch("http://localhost:5001/api/auth/login", {
         method: "POST",
@@ -31,11 +35,11 @@ const Login = () => {
         router("/dashboard");
       } else {
         console.error("Login failed:", result.message);
-        alert(result.message);
       }
     } catch (err) {
       console.error("Error logging in:", err);
-      alert("Błąd serwera, spróbuj ponownie.");
+    } finally {
+      stopLoading();
     }
   };
   return (
@@ -82,6 +86,8 @@ const Login = () => {
         />
 
         <Button
+          disabled={loading}
+          loading={loading}
           type="submit"
           variant="contained"
           className="btn--gradient btn--primary h-[50px]"
