@@ -4,7 +4,7 @@ import {
   searchProductsService,
 } from "../services/productService";
 import { Response, Request, NextFunction } from "express";
-export const fetchAllProducts = async (
+export const fetchAllProductsController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -17,7 +17,7 @@ export const fetchAllProducts = async (
   }
 };
 
-export const fetchCategories = async (
+export const fetchCategoriesController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -30,7 +30,7 @@ export const fetchCategories = async (
   }
 };
 
-export const searchProducts = async (
+export const searchProductsController = async (
   req: Request,
   res: Response,
   next: NextFunction

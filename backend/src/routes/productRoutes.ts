@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { searchProductsService } from "../services/productService";
 import {
-  fetchAllProducts,
-  fetchCategories,
-  searchProducts,
+  fetchAllProductsController,
+  fetchCategoriesController,
+  searchProductsController,
 } from "../controller/productController";
+
 const router = Router();
 
-router.get("/", fetchAllProducts);
-router.get("/categories", fetchCategories);
-router.get("/search", searchProducts);
+router.get("/", fetchAllProductsController);
+router.get("/categories", fetchCategoriesController);
+router.get("/search", searchProductsController);
 export default router;

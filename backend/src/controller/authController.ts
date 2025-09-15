@@ -4,7 +4,7 @@ import handleResponse from "../utils/handleReponse";
 import { getUser } from "../models/userModel";
 import { HttpError } from "../utils/httpError";
 
-export const register = async (
+export const registerController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,7 +18,7 @@ export const register = async (
   }
 };
 
-export const login = async (
+export const loginController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -32,7 +32,7 @@ export const login = async (
   }
 };
 
-export const getCurrentUser = async (
+export const getCurrentUserController = async (
   req: Request & { userId?: number },
   res: Response,
   next: NextFunction
