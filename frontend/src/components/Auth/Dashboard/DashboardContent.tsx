@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLoading from "../../../hooks/useLoading";
 import useAuth from "../../../hooks/useAuth";
+import ProductList from "../../Products/ProductList";
 
 const DashboardContent = () => {
   const router = useNavigate();
@@ -25,6 +26,8 @@ const DashboardContent = () => {
       <p>
         Jesteś zalogowany jako: <strong>{currentUser?.email}</strong>
       </p>
+      <div>To sa products</div>
+      <ProductList />
     </div>
   );
 };
