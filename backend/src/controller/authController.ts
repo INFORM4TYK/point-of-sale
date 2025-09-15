@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { registerUser, loginUser } from "../services/authService";
 import handleResponse from "../utils/handleReponse";
+import { getUser } from "../models/userModel";
+import { HttpError } from "../utils/httpError";
 
 export const register = async (
   req: Request,
@@ -25,6 +27,23 @@ export const login = async (
     const { email, password } = req.body;
     const data = await loginUser(email, password);
     handleResponse(res, 200, "Login successful", data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCurrentUser = async (
+  req: Request & { userId?: number },
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId;
+    if (!userId) throw new HttpError(401, "Unauthorized");
+
+    const user = await getUser(userId);
+    if (!user) throw new HttpError(401, "Unauthorized");
+    handleResponse(res, 200, "User fetched successfully", user);
   } catch (err) {
     next(err);
   }

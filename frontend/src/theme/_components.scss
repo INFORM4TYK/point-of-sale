@@ -1,0 +1,21 @@
+.btn--primary {
+  font-weight: bold;
+  color: $text-white;
+  margin-top: 0.25rem;
+  border-radius: 10px;
+}
+.btn--negative {
+  font-weight: medium;
+  color: $danger-color;
+  margin-top: 0.25rem;
+  border-radius: 10px;
+  background-color: transparent;
+  border: 1px solid $danger-color;
+}
+.btn--gradient {
+  background: linear-gradient(to right, $primary-color, #047dc8);
+}
+.pattern-bg {
+  background-image: url("../assets/images/Star.png");
+  background-repeat: repeat;
+}

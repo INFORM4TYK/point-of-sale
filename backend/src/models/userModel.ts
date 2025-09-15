@@ -7,10 +7,7 @@ export interface User {
   password: string;
 }
 
-export const createUserService = async (
-  email: string,
-  password: string
-) => {
+export const createUserService = async (email: string, password: string) => {
   const result = await pool.query(
     "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
     [email, password]
@@ -22,5 +19,14 @@ export const getUserByEmailService = async (email: string) => {
   const result = await pool.query("SELECT * FROM users WHERE email=$1", [
     email,
   ]);
+  return result.rows[0];
+};
+
+export const getUser = async (userId: number) => {
+  const result = await pool.query(
+    "SELECT id, email FROM users WHERE id = $1",
+    [userId]
+  );
+  if (!result.rows[0]) throw new Error("User not found");
   return result.rows[0];
 };

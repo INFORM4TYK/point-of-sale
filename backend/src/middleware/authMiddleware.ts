@@ -3,14 +3,29 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = "supersecret";
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+interface AuthRequest extends Request {
+  userId?: number;
+  email?: string;
+}
+
+export const authMiddleware = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: "No token" });
+  if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
 
   const token = authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    (req as any).user = decoded;
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      id: number;
+      email: string;
+    };
+    req.userId = decoded.id;
+    req.email = decoded.email;
     next();
   } catch {
     res.status(401).json({ message: "Invalid token" });

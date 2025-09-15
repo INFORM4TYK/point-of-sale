@@ -1,12 +1,18 @@
 import { Request, Response, NextFunction } from "express";
-
+import { HttpError } from "../utils/httpError";
 const errorHandling = (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err.stack);
+  if (err instanceof HttpError) {
+    return res.status(err.statusCode).json({
+      status: err.statusCode,
+      message: err.message,
+    });
+  }
+
   res.status(500).json({
     status: 500,
     message: "Somthing went wrong",
@@ -14,4 +20,4 @@ const errorHandling = (
   });
 };
 
-export default errorHandling
+export default errorHandling;
