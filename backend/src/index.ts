@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
+import productRoutes from "./routes/productRoutes";
 import errorHandling from "./middleware/errorHandler";
 import createUserTable from "./data/createUserTable";
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 createUserTable();
 
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
 app.use(errorHandling);
 
