@@ -1,10 +1,8 @@
 import { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
 import ProductList from "../../Products/ProductList";
 import DashboardSideMenu from "./Common/DashboardSideMenu";
 
 const DashboardContent = () => {
-  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "pos" | "products" | "orders" | "clients" | "settings"
   >("dashboard");

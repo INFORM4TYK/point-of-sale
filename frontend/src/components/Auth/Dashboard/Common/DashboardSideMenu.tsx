@@ -27,9 +27,8 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
   }, []);
   const [open, setOpen] = useState(false);
   return (
-    <>
-      <div className="sm:hidden fixed top-4 right-4 z-20 bg-primary rounded-sm flex items-center px-2 py-1 gap-1">
-        <span className="text-white text-xs">Menu</span>
+    <section>
+      <div className="sm:hidden absolute top-5 right-5 z-20 bg-primary rounded-lg flex items-center px-2 py-1 gap-1">
         <IconButton
           onClick={() => setOpen((prev) => !prev)}
           sx={{ padding: 0 }}
@@ -102,7 +101,7 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
           </footer>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

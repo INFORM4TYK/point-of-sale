@@ -7,7 +7,7 @@ const ProductItemActions = () => {
   const increment = () => setQuantity((prev) => prev + 1);
   const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
   return (
-    <div className="flex flex-wrap items-end justify-between ">
+    <div className="flex flex-wrap items-end justify-between my-1">
       <div className="flex items-center border rounded-md overflow-hidden w-max ">
         <button
           onClick={decrement}
