@@ -7,4 +7,5 @@ export interface Product {
   image: string;
   rating_rate: string;
   rating_count: number;
+  stock: number;
 }

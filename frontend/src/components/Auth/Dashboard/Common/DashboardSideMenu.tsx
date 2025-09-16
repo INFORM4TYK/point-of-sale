@@ -7,18 +7,15 @@ type SideMenuProps = {
   setActiveTab: (tab: any) => void;
 };
 import MenuIcon from "@mui/icons-material/Menu";
+import useAuth from "../../../../hooks/useAuth";
 const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
   const tabs = [
     { key: "dashboard", label: "Panel Główny" },
-    { key: "pos", label: "POS" },
     { key: "products", label: "Produkty" },
     { key: "orders", label: "Zamówienia" },
     { key: "clients", label: "Klienci" },
-    { key: "settings", label: "Ustawienia" },
   ];
-  const currentUser = {
-    email: "example@gmail.com",
-  };
+  const { currentUser, logout } = useAuth();
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -57,7 +54,6 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
               <div className="sm:hidden">
                 <CloseIcon
                   onClick={() => setOpen(false)}
-                
                   sx={{ fontSize: "2rem !important" }}
                 />
               </div>
@@ -85,7 +81,7 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
             <Button
               className="w-full"
               variant="outlined"
-              onClick={() => console.log("WYLOGUJ SIĘ")}
+              onClick={() => logout()}
               sx={{
                 color: "red",
                 borderColor: "red",

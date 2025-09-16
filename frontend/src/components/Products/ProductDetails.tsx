@@ -1,8 +1,9 @@
-
-const ProductDetails = () => {
+const ProductDetails = ({ id }: { id: string }) => {
   return (
-    <div>ProductDetails</div>
-  )
-}
+    <div>
+      <div>To jest id prodcuktu : {id}</div>
+    </div>
+  );
+};
 
-export default ProductDetails
+export default ProductDetails;
