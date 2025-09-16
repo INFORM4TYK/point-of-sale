@@ -1,8 +1,4 @@
-import {
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Authentication from "./pages/auth/Authentication";
 import Dashboard from "./pages/auth/Dashboard";
 

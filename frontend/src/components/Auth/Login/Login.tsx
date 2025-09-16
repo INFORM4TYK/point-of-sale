@@ -53,6 +53,7 @@ const Login = () => {
               borderRadius: "10px",
             },
           }}
+          autoComplete="email"
           label="Email"
           type="email"
           {...register("email", { required: "Email jest wymagany" })}
