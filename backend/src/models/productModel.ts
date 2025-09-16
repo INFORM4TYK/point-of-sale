@@ -6,8 +6,8 @@ export const createProduct = async (products: Product[]) => {
   const productPromises = products.map((product) =>
     pool.query(
       `INSERT INTO products 
-        (product_id, title, price, description, category_id, image, rating_rate, rating_count) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+    (id, title, price, description, category, image, rating_rate, rating_count, stock) 
+   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         product.id,
         product.title,
@@ -42,10 +42,11 @@ export const createCategory = async (categories: string[]) => {
   return { success: true };
 };
 export const searchProducts = async (query: string): Promise<Product[]> => {
+  const safeQuery = query.replace(/[%_]/g, "\\$&");
   const result = await pool.query(
     `SELECT * FROM products 
      WHERE title ILIKE $1 OR description ILIKE $1`,
-    [`%${query}%`]
+    [`%${safeQuery}%`]
   );
   return result.rows as Product[];
 };

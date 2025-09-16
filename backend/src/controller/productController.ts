@@ -36,7 +36,7 @@ export const searchProductsController = async (
   next: NextFunction
 ) => {
   try {
-    const query = req.query.q as string;
+   const query = (req.query.q as string).slice(0, 100);
     if (!query) return res.status(400).json({ message: "Query is required" });
 
     const products = await searchProductsService(query);
