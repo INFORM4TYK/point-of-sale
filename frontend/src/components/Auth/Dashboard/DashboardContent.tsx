@@ -7,7 +7,7 @@ import ProductList from "../../Products/ProductList";
 const DashboardContent = () => {
   const router = useNavigate();
   const { loading } = useLoading();
-  const { currentUser, loadingUser } = useAuth();
+  const { currentUser, loadingUser, logout } = useAuth();
 
   useEffect(() => {
     if (!loadingUser && !loading && !currentUser) {
@@ -22,12 +22,12 @@ const DashboardContent = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-2">Dashboard</h1>
-      <button></button>
+      <button onClick={() => logout()}>Wyloguj się</button>
       <p>
         Jesteś zalogowany jako: <strong>{currentUser?.email}</strong>
       </p>
       <div>To sa products</div>
-      <ProductList />
+      {/* <ProductList /> */}
     </div>
   );
 };

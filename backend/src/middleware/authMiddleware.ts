@@ -1,7 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET = "supersecret";
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 interface AuthRequest extends Request {
   userId?: number;

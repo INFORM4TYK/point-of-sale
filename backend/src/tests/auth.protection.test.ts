@@ -20,7 +20,7 @@ describe("Protected endpoint", () => {
       .post("/api/auth/login")
       .send({ email: testEmail, password: testPassword });
 
-    token = res.body.data.token;
+    token = res.body.data.accessToken;
   });
   it("should deny access with wrong token", async () => {
     const fakeToken = "123123";

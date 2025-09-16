@@ -1,8 +1,14 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  type ReactNode,
+  useCallback,
+} from "react";
+import api, { setAccessToken } from "../config/api";
+import { useNavigate } from "react-router-dom";
 import useLoading from "../hooks/useLoading";
 import useError from "../hooks/useError";
-import api from "../config/api";
-import { useNavigate } from "react-router-dom";
 
 type User = { id: number; email: string };
 type LoginFormInputs = { email: string; password: string };
@@ -20,20 +26,23 @@ export const AuthContext = createContext<AuthContextInterface | undefined>(
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const { startLoading } = useLoading();
   const [loadingUser, setLoadingUser] = useState(true);
-  console.log("💀 ~ AuthProvider ~ loadingUser:", loadingUser);
+  const { startLoading } = useLoading();
   const { dispatchError } = useError();
   const navigate = useNavigate();
+
   const login = async (data: LoginFormInputs) => {
     const stopLoading = startLoading();
     try {
       const res = await api.post("/auth/login", data);
-      localStorage.setItem("token", res.data.data.token);
-      setCurrentUser(res.data.data.user);
+
+      const { user, accessToken } = res.data.data;
+
+      setAccessToken(accessToken);
+      setCurrentUser(user);
+
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
-      console.log(err.response);
       if (err.response) {
         dispatchError({ type: err.response.data.message });
       } else {
@@ -44,40 +53,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = useCallback(async () => {
     setCurrentUser(null);
-  };
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setLoadingUser(false);
-        return;
-      }
+    setAccessToken(null);
 
+    try {
+      await api.post("/auth/logout");
+    } catch (error) {
+      console.error("Logout failed, but clearing client-side session.", error);
+    } finally {
+      navigate("/auth");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const location = window.location.pathname;
+    if (location === "/auth") {
+      setLoadingUser(false);
+      return;
+    }
+
+    const checkUserSession = async () => {
       try {
-        const res = await api.get("/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("💀 ~ fetchUser ~ res:", res);
-        setCurrentUser(res.data.data);
-      } catch (err: any) {
-        localStorage.removeItem("token");
+        const res = await api.post("/auth/refresh");
+        setAccessToken(res.data.token);
+
+        const userRes = await api.get("/auth/me");
+        setCurrentUser(userRes.data.data);
+      } catch {
+        navigate("/auth", { replace: true });
         setCurrentUser(null);
+        setAccessToken(null);
       } finally {
-        console.log("TU JESTEM");
         setLoadingUser(false);
       }
     };
 
-    fetchUser();
+    checkUserSession();
   }, []);
   return (
     <AuthContext.Provider value={{ loadingUser, currentUser, login, logout }}>
-      {children}
+      {!loadingUser && children}
     </AuthContext.Provider>
   );
 };
