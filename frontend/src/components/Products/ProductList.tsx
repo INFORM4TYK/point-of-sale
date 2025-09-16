@@ -8,7 +8,7 @@ const ProductList = () => {
 
   useEffect(() => {
     getProducts().then(setProducts).catch(console.error);
-  }, []);
+  }, []); 
 
   console.log("💀 ~ ProductList ~ products:", products);
   return (

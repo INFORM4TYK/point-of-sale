@@ -13,11 +13,11 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <LoadingProvider>
         <ErrorProvider>
-          <AuthProvider>
+          {/* <AuthProvider> */}
             <BackDropLayout>
               <App />
             </BackDropLayout>
-          </AuthProvider>
+          {/* </AuthProvider> */}
         </ErrorProvider>
       </LoadingProvider>
     </BrowserRouter>
