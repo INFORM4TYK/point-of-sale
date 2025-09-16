@@ -6,11 +6,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/dev" replace />} />
-        <Route path="/dev" element={<Dashboard />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-        {/* <Route path="/auth" element={<Authentication />} /> */}
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route path="/auth" element={<Authentication />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );
