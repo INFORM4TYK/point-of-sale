@@ -5,11 +5,7 @@ import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import errorHandling from "./middleware/errorHandler";
-import createUserTable from "./data/createUserTable";
-import createOrdersTable from "./data/createOrdersTable";
-import createOrderItemsTable from "./data/createOrderItemsTable";
-import createProductsTable from "./data/createProductsTable";
-import createCategoriesTable from "./data/createCategoriesTable";
+
 const app = express();
 app.use(
   cors({
