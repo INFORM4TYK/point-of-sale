@@ -10,6 +10,6 @@ import { authMiddleware } from "../middleware/authMiddleware";
 const router = Router();
 
 router.get("/",authMiddleware, fetchAllProductsController);
-router.get("/categories", authMiddleware,fetchCategoriesController);
-router.get("/search", authMiddleware, searchProductsController);
+router.get("/categories",fetchCategoriesController);
+router.get("/search", searchProductsController);
 export default router;
