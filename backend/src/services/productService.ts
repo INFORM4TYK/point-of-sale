@@ -30,7 +30,6 @@ export const getAllProductsService = async (): Promise<Product[]> => {
 export const getCategoriesService = async (): Promise<string[]> => {
   try {
     const result = await pool.query("SELECT * FROM categories");
-    console.log("💀 ~ getCategoriesService ~ result:", result)
     if (result.rows.length > 0) {
      return result.rows.map(row => row.category);
     }

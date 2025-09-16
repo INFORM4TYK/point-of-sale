@@ -2,12 +2,13 @@ import { Product } from "../types/Product";
 import pool from "../config/db";
 
 export const createProduct = async (products: Product[]) => {
-  const randomStock = Math.floor(Math.random() * (100 - 10 + 1)) + 10; // random stock beacuse FAKESTOREAPI doesnt have it
-  const productPromises = products.map((product) =>
-    pool.query(
+  const productPromises = products.map((product) => {
+    const randomStock = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+
+    return pool.query(
       `INSERT INTO products 
-    (id, title, price, description, category, image, rating_rate, rating_count, stock) 
-   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        (id, title, price, description, category, image, rating_rate, rating_count, stock) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         product.id,
         product.title,
@@ -19,14 +20,13 @@ export const createProduct = async (products: Product[]) => {
         product.rating.count,
         randomStock,
       ]
-    )
-  );
+    );
+  });
 
   await Promise.all(productPromises);
 
   return { success: true };
 };
-
 export const createCategory = async (categories: string[]) => {
   const categoriesPromises = categories.map((category) =>
     pool.query(
