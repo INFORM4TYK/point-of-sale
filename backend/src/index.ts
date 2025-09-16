@@ -7,14 +7,13 @@ import errorHandling from "./middleware/errorHandler";
 import createUserTable from "./data/createUserTable";
 import createOrdersTable from "./data/createOrdersTable";
 import createOrderItemsTable from "./data/createOrderItemsTable";
+import createProductsTable from "./data/createProductsTable";
+import createCategoriesTable from "./data/createCategoriesTable";
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Create tables before starting server
-createUserTable();
-createOrderItemsTable();
-createOrdersTable();
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
