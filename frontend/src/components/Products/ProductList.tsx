@@ -4,14 +4,17 @@ import { getProducts, searchProducts } from "../../services/productService";
 import ProductItem from "./ProductItem";
 import ProductSearch from "./ProductSearch";
 import ProductListNotFound from "./parts/ProductListNotFound";
+import useLoading from "../../hooks/useLoading";
 
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
+  const { startLoading } = useLoading();
   useEffect(() => {
-    getProducts().then(setProducts).catch(console.error);
+    const stopLoading = startLoading();
+    getProducts().then(setProducts).finally(stopLoading);
   }, []);
 
   useEffect(() => {

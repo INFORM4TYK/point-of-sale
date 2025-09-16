@@ -1,34 +1,18 @@
-import { useState } from "react";
-import ProductList from "../../Products/ProductList";
-import DashboardSideMenu from "./Common/DashboardSideMenu";
+import DashboardCategoryChart from "./parts/DashboardCategoryChart";
+import DashboardSalesChart from "./parts/DashboardSalesChart";
+import DashboardStats from "./parts/DashboardStats";
 
 const DashboardContent = () => {
-  const [activeTab, setActiveTab] = useState<
-    "dashboard" | "pos" | "products" | "orders" | "clients" | "settings"
-  >("dashboard");
-
-  const renderTab = () => {
-    switch (activeTab) {
-      case "dashboard":
-        return <ProductList />;
-      case "pos":
-        return <div>Witamy w POS</div>;
-      case "products":
-        return <div>Witamy w produkty</div>;
-      case "orders":
-        return <div>Witamy w zamówienia</div>;
-      case "clients":
-        return <div>Witamy w klienci</div>;
-      case "settings":
-        return <div>Witamy w ustawienia</div>;
-      default:
-        return <div>Witamy</div>;
-    }
-  };
   return (
-    <div className="w-full h-screen flex">
-      <DashboardSideMenu activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="flex-1 p-4 sm:p-6 overflow-auto">{renderTab()}</main>
+    <div className="flex flex-col gap-4">
+      <h2 className="text-3xl text-textDark pb-4 font-semibold">
+        Panel Zarządzania
+      </h2>
+      <DashboardStats />
+      <DashboardSalesChart />
+      <div className="flex gap-4 flex-wrap">
+        <DashboardCategoryChart />
+      </div>
     </div>
   );
 };

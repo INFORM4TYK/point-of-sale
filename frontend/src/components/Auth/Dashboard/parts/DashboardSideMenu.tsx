@@ -1,5 +1,5 @@
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, IconButton } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 type SideMenuProps = {
@@ -58,6 +58,7 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
                 />
               </div>
             </div>
+            <Divider />
             <section className="flex flex-col gap-2">
               {tabs.map((tab) => (
                 <button

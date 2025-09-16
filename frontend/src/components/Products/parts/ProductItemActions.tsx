@@ -26,19 +26,23 @@ const ProductItemActions = ({
         <p className="text-sm">
           Dostępne <strong>{stock}</strong> sztuk
         </p>
-        <div className="flex items-center border rounded-md overflow-hidden w-max ">
+        <div className="flex items-stretch rounded-md overflow-hidden w-max ">
           <button
             disabled={quantity === 1}
             onClick={decrement}
-            className="px-3 py-1 bg-gray-300 hover:bg-gray-400 transition h-[40px]"
+            className="px-3 py-1 bg-gray-300 hover:bg-gray-400 disabled:hover:bg-gray-300 disabled:opacity-50 transition h-[40px]"
           >
             <Remove />
           </button>
-          <span className="px-4 text-center">{quantity}</span>
+
+          <span className="px-4 text-center grid place-items-center border">
+            {quantity}
+          </span>
+
           <button
             disabled={quantity === stock}
             onClick={increment}
-            className="px-3 py-1 bg-gray-300 hover:bg-gray-400 transition h-[40px]"
+            className="px-3 py-1 bg-gray-300 hover:bg-gray-400 disabled:hover:bg-gray-300 disabled:opacity-50 transition h-[40px]"
           >
             <Add />
           </button>
@@ -47,7 +51,7 @@ const ProductItemActions = ({
       <button
         onClick={() => addToCart()}
         type="submit"
-        className="btn--gradient btn--primary h-[40px] font-normal text-sm px-4"
+        className="hover:opacity-90 transform  transition duration-100 btn--gradient btn--primary h-[40px] font-normal text-sm px-4"
       >
         Dodaj do koszyka
       </button>

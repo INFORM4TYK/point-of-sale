@@ -29,7 +29,7 @@ const ProductSearch = ({
           <div
             key={cat}
             onClick={() => setCategory(category === cat ? "" : cat)}
-            className={`p-2 text-center grid place-items-center flex-1 xl:py-4 rounded-lg cursor-pointer ${
+            className={`hover:opacity-90 p-2 text-center grid place-items-center uppercase font-semibold flex-1 xl:py-4 rounded-lg cursor-pointer ${
               category === cat ? "bg-blue-500 text-white" : "bg-gray-100"
             }`}
           >
