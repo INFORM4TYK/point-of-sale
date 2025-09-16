@@ -4,6 +4,7 @@ import { HttpError } from "../utils/httpError";
 import {
   createCategory,
   createProduct,
+  getProductById,
   searchProducts,
 } from "../models/productModel";
 import pool from "../config/db";
@@ -31,7 +32,7 @@ export const getCategoriesService = async (): Promise<string[]> => {
   try {
     const result = await pool.query("SELECT * FROM categories");
     if (result.rows.length > 0) {
-     return result.rows.map(row => row.category);
+      return result.rows.map((row) => row.category);
     }
 
     const { data } = await axios.get<string[]>(
@@ -49,6 +50,16 @@ export const searchProductsService = async (
 ): Promise<Product[]> => {
   try {
     return await searchProducts(query);
+  } catch (err) {
+    throw new HttpError(500, "products/failed-search-products");
+  }
+};
+
+export const getProductByIdService = async (
+  id: string
+): Promise<Product | null> => {
+  try {
+    return await getProductById(id);
   } catch (err) {
     throw new HttpError(500, "products/failed-search-products");
   }

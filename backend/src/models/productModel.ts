@@ -50,3 +50,16 @@ export const searchProducts = async (query: string): Promise<Product[]> => {
   );
   return result.rows as Product[];
 };
+
+export const getProductById = async (id: string): Promise<Product | null> => {
+  const result = await pool.query(
+    `SELECT * FROM products WHERE id = $1 LIMIT 1`,
+    [id]
+  );
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0] as Product;
+};
