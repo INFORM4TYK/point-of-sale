@@ -2,12 +2,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Button, Divider, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import useAuth from "../../../../hooks/useAuth";
 type SideMenuProps = {
   activeTab: string;
   setActiveTab: (tab: any) => void;
 };
-import MenuIcon from "@mui/icons-material/Menu";
-import useAuth from "../../../../hooks/useAuth";
 const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
   const tabs = [
     { key: "dashboard", label: "Panel Główny" },

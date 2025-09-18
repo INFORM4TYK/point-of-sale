@@ -5,6 +5,7 @@ import ProductItem from "./ProductItem";
 import ProductSearch from "./ProductSearch";
 import ProductListNotFound from "./parts/ProductListNotFound";
 import useLoading from "../../hooks/useLoading";
+import SideCart from "../Cart/SideCart";
 
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -45,24 +46,30 @@ const ProductList = () => {
   }, [category, products]);
   return (
     <div>
-      <h2 className="text-3xl text-textDark pb-4">
-        Produkty ({products.length ?? 0})
-      </h2>
-      <ProductSearch
-        query={query}
-        setQuery={setQuery}
-        setCategory={setCategory}
-        category={category}
-      />
-      {filteredProducts.length > 0 ? (
-        <section className="grid gap-4  sm:grid-cols-[repeat(auto-fit,minmax(350px,1fr))]">
-          {filteredProducts.map((p) => (
-            <ProductItem product={p} />
-          ))}
-        </section>
-      ) : (
-        <ProductListNotFound query={query} />
-      )}
+      <div className="flex flex-col lg:flex-row-reverse">
+        <SideCart />
+
+        <div className="flex-1 p-2 py-4">
+          <h2 className="hidden lg:block text-3xl text-textDark pb-4">
+            Produkty ({products.length ?? 0})
+          </h2>
+          <ProductSearch
+            query={query}
+            setQuery={setQuery}
+            setCategory={setCategory}
+            category={category}
+          />
+          {filteredProducts.length > 0 ? (
+            <section className="grid gap-4  sm:grid-cols-[repeat(auto-fit,minmax(350px,1fr))]">
+              {filteredProducts.map((p) => (
+                <ProductItem product={p} />
+              ))}
+            </section>
+          ) : (
+            <ProductListNotFound query={query} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

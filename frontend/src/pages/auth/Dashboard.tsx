@@ -29,8 +29,8 @@ const Dashboard = () => {
   return (
     <div className="w-full h-screen flex">
       <DashboardSideMenu activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="flex-1 p-4 sm:p-6 overflow-auto">{renderTab()}</main>
-      <DashboardCart />
+      <main className="flex-1  overflow-auto">{renderTab()}</main>
+    
     </div>
   );
 };
