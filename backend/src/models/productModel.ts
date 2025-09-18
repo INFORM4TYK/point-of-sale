@@ -1,10 +1,11 @@
 import { Product } from "../types/Product";
 import pool from "../config/db";
+import Decimal from "decimal.js";
 
 export const createProduct = async (products: Product[]) => {
   const productPromises = products.map((product) => {
     const randomStock = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-
+   const amountInMinorUnits = new Decimal(product.price).times(100).toNumber();
     return pool.query(
       `INSERT INTO products 
         (id, title, price, description, category, image, rating_rate, rating_count, stock) 
@@ -12,7 +13,7 @@ export const createProduct = async (products: Product[]) => {
       [
         product.id,
         product.title,
-        product.price,
+        amountInMinorUnits,
         product.description,
         product.category,
         product.image,
