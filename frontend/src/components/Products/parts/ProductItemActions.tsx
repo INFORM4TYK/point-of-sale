@@ -1,6 +1,6 @@
 import { Add, Remove } from "@mui/icons-material";
 import { useState } from "react";
-import { addItemToCart } from "../../../services/cartService";
+import useCart from "../../../hooks/useCart";
 const ProductItemActions = ({
   product_id,
   stock,
@@ -9,6 +9,7 @@ const ProductItemActions = ({
   stock: number;
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
   const increment = () =>
     setQuantity((prev) => (prev < stock ? prev + 1 : prev));
 
@@ -43,9 +44,7 @@ const ProductItemActions = ({
         </div>
       </div>
       <button
-        onClick={() =>
-          addItemToCart({ productId: product_id, amount: quantity })
-        }
+        onClick={() => addToCart(product_id, quantity)}
         type="submit"
         className="hover:opacity-90 transform  transition duration-100 btn--gradient btn--primary h-[40px] font-normal text-sm px-4"
       >

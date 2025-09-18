@@ -27,13 +27,13 @@ export const addItemToCart = async ({
     throw new Error("Failed to fetch products");
   }
 };
-export const removeItemToCart = async ({
+export const removeItemFromCart = async ({
   productId,
 }: {
   productId: number;
 }): Promise<Product[]> => {
   try {
-    const { data } = await api.post<{ data: Product[] }>(
+    const { data } = await api.delete<{ data: Product[] }>(
       `/cart/${productId}`,
       {}
     );
@@ -52,17 +52,18 @@ export const updateItemToCart = async ({
   try {
     const { data } = await api.put<{ data: Product[] }>("/cart/", {
       productId,
-      updated_amount,
+      amount: updated_amount,
     });
     return data.data;
   } catch (err) {
     throw new Error("Failed to fetch products");
   }
 };
-export const getCartTotal = async (): Promise<Product[]> => {
+export const getCartTotal = async (): Promise<number> => {
   try {
-    const { data } = await api.get<{ data: Product[] }>("/cart/total", {});
-    return data.data;
+    const { data } = await api.get<{ total: number }>("/cart/total", {});
+
+    return data.total;
   } catch (err) {
     throw new Error("Failed to fetch products");
   }

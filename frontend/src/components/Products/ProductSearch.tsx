@@ -24,12 +24,12 @@ const ProductSearch = ({
 
   return (
     <div className="w-full py-2 flex justify-between xl:items-center flex-col xl:flex-row gap-2">
-      <div className="flex flex-1 gap-2 items-stretch">
+      <div className="flex flex-1 gap-2 items-stretch flex-wrap">
         {categories.map((cat) => (
           <div
             key={cat}
             onClick={() => setCategory(category === cat ? "" : cat)}
-            className={`hover:opacity-90 p-2 text-center grid place-items-center uppercase font-semibold flex-1 xl:py-4 rounded-lg cursor-pointer ${
+            className={`hover:opacity-90 p-2 text-center grid place-items-center uppercase font-semibold flex-1  rounded-lg cursor-pointer ${
               category === cat ? "bg-blue-500 text-white" : "bg-gray-100"
             }`}
           >
