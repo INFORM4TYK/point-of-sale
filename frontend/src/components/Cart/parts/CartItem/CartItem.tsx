@@ -4,7 +4,6 @@ import type { CartProduct } from "../../../../types/Product";
 import { Add, Remove } from "@mui/icons-material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 const CartItem = ({ cartProduct }: { cartProduct: CartProduct }) => {
-  console.log("💀 ~ CartItem ~ cartProduct:", cartProduct);
   const { updateCartItem, removeFromCart } = useCart();
   const normalizedTotalPrice = new Decimal(cartProduct.price)
     .mul(cartProduct.amount)

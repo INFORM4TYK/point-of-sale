@@ -1,9 +1,13 @@
 import type { CartProduct, Product } from "../types/Product";
 import api from "../config/api";
 
-export const getCartItems = async (): Promise<CartProduct[]> => {
+export const getCartItems = async ({
+  cartId,
+}: {
+  cartId: number;
+}): Promise<CartProduct[]> => {
   try {
-    const { data } = await api.get<{ data: CartProduct[] }>("/cart/", {});
+    const { data } = await api.get<{ data: CartProduct[] }>(`/cart/${cartId}`);
     return data.data;
   } catch (err) {
     throw new Error("Failed to fetch products");
@@ -13,12 +17,14 @@ export const getCartItems = async (): Promise<CartProduct[]> => {
 export const addItemToCart = async ({
   productId,
   amount,
+  cartId,
 }: {
   productId: number;
   amount: number;
+  cartId: number;
 }): Promise<Product[]> => {
   try {
-    const { data } = await api.post<{ data: Product[] }>("/cart/", {
+    const { data } = await api.post<{ data: Product[] }>(`/cart/${cartId}`, {
       productId,
       amount,
     });
@@ -29,13 +35,14 @@ export const addItemToCart = async ({
 };
 export const removeItemFromCart = async ({
   productId,
+  cartId,
 }: {
   productId: number;
+  cartId: number;
 }): Promise<Product[]> => {
   try {
     const { data } = await api.delete<{ data: Product[] }>(
-      `/cart/${productId}`,
-      {}
+      `/cart/${cartId}/product/${productId}`
     );
     return data.data;
   } catch (err) {
@@ -45,12 +52,14 @@ export const removeItemFromCart = async ({
 export const updateItemToCart = async ({
   productId,
   updated_amount,
+  cartId,
 }: {
   productId: number;
   updated_amount: number;
+  cartId: number;
 }): Promise<Product[]> => {
   try {
-    const { data } = await api.put<{ data: Product[] }>("/cart/", {
+    const { data } = await api.put<{ data: Product[] }>(`/cart/${cartId}`, {
       productId,
       amount: updated_amount,
     });
@@ -59,18 +68,26 @@ export const updateItemToCart = async ({
     throw new Error("Failed to fetch products");
   }
 };
-export const getCartTotal = async (): Promise<number> => {
+export const getCartTotal = async ({
+  cartId,
+}: {
+  cartId: number;
+}): Promise<number> => {
   try {
-    const { data } = await api.get<{ total: number }>("/cart/total", {});
+    const { data } = await api.get<{ total: number }>(`/cart/total/${cartId}`);
 
     return data.total;
   } catch (err) {
     throw new Error("Failed to fetch products");
   }
 };
-export const clearCart = async (): Promise<Product[]> => {
+export const clearCart = async ({
+  cartId,
+}: {
+  cartId: number;
+}): Promise<Product[]> => {
   try {
-    const { data } = await api.delete<{ data: Product[] }>("/cart", {});
+    const { data } = await api.delete<{ data: Product[] }>(`/cart/${cartId}`);
     return data.data;
   } catch (err) {
     throw new Error("Failed to fetch products");

@@ -10,52 +10,57 @@ import {
   updateItemAmount,
 } from "../models/cartModel";
 
-export const getAllCartItemsService = async (): Promise<Product[]> => {
+export const getAllCartItemsService = async (
+  cartId: number
+): Promise<Product[]> => {
   try {
-    return await getCartItems();
+    return await getCartItems(cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-fetch-cart-items");
   }
 };
 export const addCartItemService = async (
   productId: number,
-  amount: number
+  amount: number,
+  cartId: number
 ): Promise<void> => {
   try {
-    await addItemToCart(productId, amount);
+    await addItemToCart(productId, amount, cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-add-item");
   }
 };
 export const updateCartItemService = async (
   productId: string,
-  amount: number
+  amount: number,
+  cartId: number
 ): Promise<void> => {
   try {
-    await updateItemAmount(productId, amount);
+    await updateItemAmount(productId, amount, cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-update-item");
   }
 };
 export const removeCartItemService = async (
-  productId: string
+  productId: string,
+  cartId: number
 ): Promise<void> => {
   try {
-    await removeItemFromCart(productId);
+    await removeItemFromCart(productId, cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-remove-item");
   }
 };
-export const clearCartService = async (): Promise<void> => {
+export const clearCartService = async (cartId: number): Promise<void> => {
   try {
-    await clearCart();
+    await clearCart(cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-clear-cart");
   }
 };
-export const getCartTotalService = async (): Promise<number> => {
+export const getCartTotalService = async (cartId: number): Promise<number> => {
   try {
-    return await getCartTotal();
+    return await getCartTotal(cartId);
   } catch (err) {
     throw new HttpError(500, "cart/failed-fetch-total");
   }

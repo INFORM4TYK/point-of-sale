@@ -14,7 +14,9 @@ export const getCartItemsController = async (
   next: NextFunction
 ) => {
   try {
-    const items = await getAllCartItemsService();
+    const cartId = Number(req.params.cartId);
+
+    const items = await getAllCartItemsService(cartId);
     res.status(200).json({ data: items });
   } catch (err) {
     next(err);
@@ -26,9 +28,11 @@ export const addCartItemController = async (
   next: NextFunction
 ) => {
   try {
+    const cartId = Number(req.params.cartId);
+
     const { productId, amount } = req.body;
-    console.log("💀 ~ addCartItemController ~ productId:", productId)
-    await addCartItemService(productId, amount);
+    console.log("💀 ~ addCartItemController ~ productId:", productId);
+    await addCartItemService(productId, amount, cartId);
     res.status(201).json({ message: "Item added to cart" });
   } catch (err) {
     next(err);
@@ -40,8 +44,10 @@ export const updateCartItemController = async (
   next: NextFunction
 ) => {
   try {
+    const cartId = Number(req.params.cartId);
+
     const { productId, amount } = req.body;
-    await updateCartItemService(productId, amount);
+    await updateCartItemService(productId, amount, cartId);
     res.status(200).json({ message: "Cart item updated" });
   } catch (err) {
     next(err);
@@ -54,7 +60,8 @@ export const removeCartItemController = async (
 ) => {
   try {
     const { productId } = req.params;
-    await removeCartItemService(productId);
+    const cartId = Number(req.params.cartId);
+    await removeCartItemService(productId, cartId);
     res.status(200).json({ message: "Cart item removed" });
   } catch (err) {
     next(err);
@@ -66,7 +73,9 @@ export const clearCartController = async (
   next: NextFunction
 ) => {
   try {
-    await clearCartService();
+    const cartId = Number(req.params.cartId);
+
+    await clearCartService(cartId);
     res.status(200).json({ message: "Cart cleared" });
   } catch (err) {
     next(err);
@@ -78,8 +87,10 @@ export const getCartTotalController = async (
   next: NextFunction
 ) => {
   try {
-    const total = await getCartTotalService();
-    console.log("💀 ~ getCartTotalController ~ total:", total)
+    const cartId = Number(req.params.cartId);
+
+    const total = await getCartTotalService(cartId);
+    console.log("💀 ~ getCartTotalController ~ total:", total);
     res.status(200).json({ total });
   } catch (err) {
     next(err);

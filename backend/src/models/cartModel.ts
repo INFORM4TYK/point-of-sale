@@ -1,12 +1,15 @@
+
 import pool from "../config/db";
 import Decimal from "decimal.js";
-export const getCartItems = async () => {
-  const result = await pool.query(`
+
+export const getCartItems = async (cartId: number) => {
+  const result = await pool.query(
+    `
     SELECT 
-      c.id AS cart_id,
-      c.amount,
-      c.created_at,
-      c.updated_at,
+      ci.cart_id,
+      ci.amount,
+      ci.created_at,
+      ci.updated_at,
       p.id AS product_id,
       p.title,
       p.price,
@@ -16,54 +19,86 @@ export const getCartItems = async () => {
       p.rating_rate,
       p.rating_count,
       p.stock
-    FROM cart c
-    JOIN products p ON c.product_id = p.id
-  `);
+    FROM cart_items ci
+    JOIN products p ON ci.product_id = p.id
+    WHERE ci.cart_id = $1
+    ORDER BY ci.created_at ASC
+  `,
+    [cartId]
+  );
 
-  return result.rows 
+  return result.rows;
 };
-export const addItemToCart = async (productId: number, amount: number) => {
+
+export const addItemToCart = async (
+  productId: number,
+  amount: number,
+  cartId: number
+) => {
+  const cartExists = await pool.query("SELECT * FROM carts WHERE id = $1", [
+    cartId,
+  ]);
+
+  if (cartExists.rows.length === 0) {
+    await pool.query("INSERT INTO carts (id, name) VALUES ($1, $2)", [
+      cartId,
+      `cart_${cartId}`,
+    ]);
+  }
+
   const existing = await pool.query(
-    "SELECT * FROM cart WHERE product_id = $1",
-    [productId]
+    "SELECT * FROM cart_items WHERE product_id = $1 AND cart_id = $2",
+    [productId, cartId]
   );
 
   if (existing.rows.length > 0) {
     await pool.query(
-      "UPDATE cart SET amount = amount + $1 WHERE product_id = $2",
-      [amount, productId]
+      "UPDATE cart_items SET amount = amount + $1 WHERE product_id = $2 AND cart_id = $3",
+      [amount, productId, cartId]
     );
   } else {
-    await pool.query("INSERT INTO cart (product_id, amount) VALUES ($1, $2)", [
-      productId,
-      amount,
-    ]);
+    await pool.query(
+      "INSERT INTO cart_items (product_id, amount, cart_id) VALUES ($1, $2, $3)",
+      [productId, amount, cartId]
+    );
   }
 };
-
-export const removeItemFromCart = async (productId: string) => {
-  await pool.query("DELETE FROM cart WHERE product_id = $1", [productId]);
+export const removeItemFromCart = async (productId: string, cartId: number) => {
+  await pool.query(
+    "DELETE FROM cart_items WHERE product_id = $1 AND cart_id = $2",
+    [productId, cartId]
+  );
 };
-export const updateItemAmount = async (productId: string, amount: number) => {
+
+export const updateItemAmount = async (
+  productId: string,
+  amount: number,
+  cartId: number
+) => {
   if (amount <= 0) {
-    await removeItemFromCart(productId);
+    await removeItemFromCart(productId, cartId);
   } else {
-    await pool.query("UPDATE cart SET amount = $1 WHERE product_id = $2", [
-      amount,
-      productId,
-    ]);
+    await pool.query(
+      "UPDATE cart_items SET amount = $1 WHERE product_id = $2 AND cart_id = $3",
+      [amount, productId, cartId]
+    );
   }
 };
-export const clearCart = async () => {
-  await pool.query("DELETE FROM cart");
+
+export const clearCart = async (cartId: number) => {
+  await pool.query("DELETE FROM cart_items WHERE cart_id = $1", [cartId]);
 };
 
-export const getCartTotal = async (): Promise<number> => {
-  const result = await pool.query(`
-    SELECT c.amount, p.price
-    FROM cart c
-    JOIN products p ON c.product_id = p.id
-  `);
+export const getCartTotal = async (cartId: number): Promise<number> => {
+  const result = await pool.query(
+    `
+    SELECT ci.amount, p.price
+    FROM cart_items ci
+    JOIN products p ON ci.product_id = p.id
+    WHERE ci.cart_id = $1
+  `,
+    [cartId]
+  );
 
   const total = result.rows.reduce((sum, item) => {
     const price = new Decimal(item.price);

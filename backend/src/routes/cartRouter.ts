@@ -10,11 +10,11 @@ import {
 
 const router = Router();
 
-router.get("/", getCartItemsController);
-router.post("/", addCartItemController);
-router.put("/", updateCartItemController);
-router.delete("/:productId", removeCartItemController);
-router.delete("/", clearCartController);
-router.get("/total", getCartTotalController);
+router.get("/:cartId", getCartItemsController);
+router.post("/:cartId", addCartItemController);
+router.put("/:cartId", updateCartItemController);
+router.delete("/:cartId/product/:productId", removeCartItemController);
+router.delete("/:cartId", clearCartController);
+router.get("/total/:cartId", getCartTotalController);
 
 export default router;

@@ -44,7 +44,7 @@ const ProductItemActions = ({
         </div>
       </div>
       <button
-        onClick={() => addToCart(product_id, quantity)}
+        onClick={() => addToCart(product_id, stock ?? 0 ,quantity, )}
         type="submit"
         className="hover:opacity-90 transform  transition duration-100 btn--gradient btn--primary h-[40px] font-normal text-sm px-4"
       >
