@@ -2,6 +2,7 @@ import { useState } from "react";
 import DashboardContent from "../../components/Auth/Dashboard/DashboardContent";
 import ProductList from "../../components/Products/ProductList";
 import DashboardSideMenu from "../../components/Auth/Dashboard/parts/DashboardSideMenu";
+import DashboardCart from "../../components/Cart/SideCart";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<
@@ -29,6 +30,7 @@ const Dashboard = () => {
     <div className="w-full h-screen flex">
       <DashboardSideMenu activeTab={activeTab} setActiveTab={setActiveTab} />
       <main className="flex-1 p-4 sm:p-6 overflow-auto">{renderTab()}</main>
+      <DashboardCart />
     </div>
   );
 };
