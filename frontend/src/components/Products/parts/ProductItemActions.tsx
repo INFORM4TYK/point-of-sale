@@ -1,6 +1,6 @@
 import { Add, Remove } from "@mui/icons-material";
 import { useState } from "react";
-
+import { addItemToCart } from "../../../services/cartService";
 const ProductItemActions = ({
   product_id,
   stock,
@@ -9,17 +9,11 @@ const ProductItemActions = ({
   stock: number;
 }) => {
   const [quantity, setQuantity] = useState(1);
-
   const increment = () =>
     setQuantity((prev) => (prev < stock ? prev + 1 : prev));
 
   const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
 
-  const addToCart = () => {
-    console.log(
-      `Dodano do korzyka produckt o id ${product_id} w ilości ${quantity}`
-    );
-  };
   return (
     <div className="flex flex-wrap items-end justify-between my-1">
       <div className="flex flex-col gap-2">
@@ -49,7 +43,9 @@ const ProductItemActions = ({
         </div>
       </div>
       <button
-        onClick={() => addToCart()}
+        onClick={() =>
+          addItemToCart({ productId: product_id, amount: quantity })
+        }
         type="submit"
         className="hover:opacity-90 transform  transition duration-100 btn--gradient btn--primary h-[40px] font-normal text-sm px-4"
       >

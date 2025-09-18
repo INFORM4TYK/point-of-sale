@@ -18,7 +18,7 @@ const ProductItemDetails = ({
         <strong> {ratingNumber.toFixed(1)}</strong>{" "}
         <p className="text-xs"> ({rating_count}) </p>
       </div>
-      <p className="text-gray-700 font-semibold text-end text-2xl">${price}</p>
+      <p className="text-gray-700 font-semibold text-end text-2xl">{price} PLN</p>
     </div>
   );
 };

@@ -9,3 +9,9 @@ export interface Product {
   rating_count: number;
   stock: number;
 }
+
+export interface CartProduct extends Product {
+  id: number;
+  product_id: number;
+  amount: number;
+}

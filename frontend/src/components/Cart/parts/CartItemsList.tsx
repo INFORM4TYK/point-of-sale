@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
 import useLoading from "../../../hooks/useLoading";
 import CartItem from "./CartItem/CartItem";
-import type { Product } from "../../../types/Product";
-import { getProducts } from "../../../services/productService";
+import type { CartProduct } from "../../../types/Product";
 import { Divider } from "@mui/material";
+import { getCartItems } from "../../../services/cartService";
 
 const CartItemsList = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<CartProduct[]>([]);
   const { startLoading } = useLoading();
   useEffect(() => {
     const stopLoading = startLoading();
-    getProducts().then(setProducts).finally(stopLoading);
+    getCartItems()
+      .then(setProducts)
+      .finally(stopLoading);
   }, []);
   return (
     <div className="space-y-2">
-      {products.map((product) => {
-        return (
+      {products?.length > 0 &&
+        products.map((product) => (
           <>
-            <CartItem product={product} />
+            <CartItem cartProduct={product} />
             <Divider />
           </>
-        );
-      })}
+        ))}
     </div>
   );
 };
