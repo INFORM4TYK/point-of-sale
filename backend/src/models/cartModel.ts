@@ -1,10 +1,27 @@
 import pool from "../config/db";
 import Decimal from "decimal.js";
 export const getCartItems = async () => {
-  const result = await pool.query("SELECT * FROM cart");
-  return result.rows;
-};
+  const result = await pool.query(`
+    SELECT 
+      c.id AS cart_id,
+      c.amount,
+      c.created_at,
+      c.updated_at,
+      p.id AS product_id,
+      p.title,
+      p.price,
+      p.description,
+      p.category,
+      p.image,
+      p.rating_rate,
+      p.rating_count,
+      p.stock
+    FROM cart c
+    JOIN products p ON c.product_id = p.id
+  `);
 
+  return result.rows 
+};
 export const addItemToCart = async (productId: number, amount: number) => {
   const existing = await pool.query(
     "SELECT * FROM cart WHERE product_id = $1",
@@ -48,14 +65,11 @@ export const getCartTotal = async (): Promise<number> => {
     JOIN products p ON c.product_id = p.id
   `);
 
-  // używamy Decimal do dokładnego mnożenia i sumowania
   const total = result.rows.reduce((sum, item) => {
     const price = new Decimal(item.price);
     const amount = new Decimal(item.amount);
     return sum.plus(price.times(amount));
   }, new Decimal(0));
 
-  // zwracamy jako number w groszach lub PLN z dokładnością 2 miejsc
-  return total.toNumber(); // jeśli price w PLN
-  // return total.toDecimalPlaces(2).toNumber(); // jeśli chcesz dokładnie 2 miejsca po przecinku
+  return total.toNumber();
 };
