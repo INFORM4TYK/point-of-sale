@@ -7,14 +7,15 @@ import {
   markOrderAsPaidController,
   updateOrderController,
 } from "../controller/orderController";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", getAllOrdersController);
-router.get("/:orderId", getOrderByIdController);
-router.post("/:orderId", createOrderController);
-router.put("/:orderId", updateOrderController);
-router.put("/:orderId/paid", markOrderAsPaidController);
-router.delete("/:orderId", deleteOrderController);
+router.get("/", authMiddleware, getAllOrdersController);
+router.get("/:orderId", authMiddleware, getOrderByIdController);
+router.post("/:orderId", authMiddleware, createOrderController);
+router.put("/:orderId", authMiddleware, updateOrderController);
+router.put("/:orderId/paid",authMiddleware,  markOrderAsPaidController);
+router.delete("/:orderId", authMiddleware, deleteOrderController);
 
 export default router;
