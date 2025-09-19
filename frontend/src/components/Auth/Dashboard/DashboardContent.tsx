@@ -4,7 +4,7 @@ import DashboardStats from "./parts/DashboardStats";
 
 const DashboardContent = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-2 sm:p-4">
       <h2 className="text-3xl text-textDark pb-4 font-semibold">
         Panel Zarządzania
       </h2>

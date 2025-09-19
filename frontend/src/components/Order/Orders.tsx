@@ -7,6 +7,8 @@ import OrderStackltem from "./parts/OrderStackltem";
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const { startLoading } = useLoading();
+  const [reload, setReload] = useState(false);
+
   useEffect(() => {
     const fetchOrders = async () => {
       const stopLoading = startLoading();
@@ -26,12 +28,12 @@ const Orders = () => {
     };
 
     fetchOrders();
-  }, []);
+  }, [reload]);
 
   if (orders.length === 0)
     return (
       <div className="h-screen grid place-items-center text-gray-500">
-        Brak zamówień
+        Brak zamówień - {orders.length ?? 0}
       </div>
     );
   return (
@@ -39,7 +41,7 @@ const Orders = () => {
       <h2 className="text-xl font-semibold mb-4">Lista zamówień</h2>
       <ul className="space-y-2">
         {orders.map((order) => (
-          <OrderStackltem order={order} />
+          <OrderStackltem order={order} setReload={setReload} />
         ))}
       </ul>
     </div>

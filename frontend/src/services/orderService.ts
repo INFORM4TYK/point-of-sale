@@ -67,3 +67,11 @@ export const deleteOrder = async (orderId: number): Promise<void> => {
     throw new Error("Failed to delete order");
   }
 };
+export const markOrderAsPaid = async (orderId: number): Promise<void> => {
+  try {
+    await api.put(`/orders/${orderId}/paid`);
+  } catch (err) {
+    throw new Error("Failed to update order");
+  }
+};
+

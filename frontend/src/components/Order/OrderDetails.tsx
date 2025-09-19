@@ -53,7 +53,7 @@ const OrderDetails = ({ id }: { id: string | null }) => {
           <h3 className="font-semibold mb-2">Produkty:</h3>
           <ul className="divide-y divide-gray-200">
             {order.items.map((item) => {
-              return <OrderItem item={item} />;
+              return <OrderItem item={item}  />;
             })}
           </ul>
         </div>

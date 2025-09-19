@@ -1,25 +1,24 @@
 import type { Order } from "../../../types/Order";
 import Decimal from "decimal.js";
 import OrderItem from "./OrderItem";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { markOrderAsPaid } from "../../../services/orderService";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
-const OrderStackltem = ({ order }: { order: Order }) => {
+import type { Dispatch } from "react";
+
+const OrderStackltem = ({
+  order,
+  setReload,
+}: {
+  order: Order;
+  setReload: Dispatch<(prev: boolean) => boolean>;
+}) => {
   console.log("💀 ~ OrderStackltem ~ order:", order);
   const normalizedPrice = new Decimal(order.total).div(100).toFixed(2);
   const totalItems = order.items.reduce((sum, item) => sum + item.amount, 0);
-  const [status, setStatus] = useState<"paid" | "unpaid">(
-    Math.random() > 0.5 ? "paid" : "unpaid"
-  );
-
-  const handlePay = () => {
-    console.log(`Opłać zamówienie ${order.id}`);
-    // tu w przyszłości logika do płatności
+  const handleMarkAsPaid = async () => {
+    await markOrderAsPaid(order!.id);
+    setReload((prev: boolean) => !prev);
   };
   return (
     <>
@@ -53,14 +52,14 @@ const OrderStackltem = ({ order }: { order: Order }) => {
             <div className="flex flex-col">
               <span
                 className={`font-bold ${
-                  status === "paid" ? "text-green-500" : "text-red-500"
+                  order?.status === "paid" ? "text-green-500" : "text-red-500"
                 }`}
               >
-                {status === "paid" ? "Opłacone" : "Nieopłacone"}
+                {order?.status === "paid" ? "Opłacone" : "Nieopłacone"}
               </span>
-              {status === "unpaid" && (
+              {order?.status === "unpaid" && (
                 <button
-                  onClick={handlePay}
+                  onClick={() => handleMarkAsPaid()}
                   className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                   Opłać

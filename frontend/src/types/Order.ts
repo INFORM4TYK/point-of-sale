@@ -20,4 +20,5 @@ export type Order = {
   total: string;
   created_at: string;
   items: OrderItemEnriched[];
+  status: 'paid' | 'unpaid'
 };
