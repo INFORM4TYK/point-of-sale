@@ -35,6 +35,7 @@ export const addCartItemController = async (
     await addCartItemService(productId, amount, cartId);
     res.status(201).json({ message: "Item added to cart" });
   } catch (err) {
+    
     next(err);
   }
 };

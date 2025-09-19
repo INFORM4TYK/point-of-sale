@@ -17,6 +17,7 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("RESTRICT");
     table.integer("amount").notNullable();
     table.decimal("price", 10, 2).notNullable();
+    table.string("category").notNullable();
     table.timestamps(true, true);
   });
 }

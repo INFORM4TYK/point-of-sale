@@ -16,9 +16,9 @@ export async function up(knex: Knex): Promise<void> {
       .inTable("products")
       .onDelete("CASCADE");
     table.integer("amount").notNullable().defaultTo(1);
+    table.string("category").notNullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
-
     table.unique(["cart_id", "product_id"]);
   });
 }

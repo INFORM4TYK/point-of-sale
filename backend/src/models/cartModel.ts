@@ -10,11 +10,11 @@ export const getCartItems = async (cartId: number) => {
       ci.amount,
       ci.created_at,
       ci.updated_at,
+      ci.category,
       p.id AS product_id,
       p.title,
       p.price,
       p.description,
-      p.category,
       p.image,
       p.rating_rate,
       p.rating_count,
@@ -26,7 +26,7 @@ export const getCartItems = async (cartId: number) => {
   `,
     [cartId]
   );
-
+  
   return result.rows;
 };
 
@@ -51,15 +51,26 @@ export const addItemToCart = async (
     [productId, cartId]
   );
 
-  if (existing.rows.length > 0) {
+   if (existing.rows.length > 0) {
     await pool.query(
       "UPDATE cart_items SET amount = amount + $1 WHERE product_id = $2 AND cart_id = $3",
       [amount, productId, cartId]
     );
   } else {
+    const productRes = await pool.query(
+      "SELECT category FROM products WHERE id = $1",
+      [productId]
+    );
+
+    if (productRes.rows.length === 0) {
+      throw new Error("Product not found");
+    }
+
+    const category = productRes.rows[0].category;
+
     await pool.query(
-      "INSERT INTO cart_items (product_id, amount, cart_id) VALUES ($1, $2, $3)",
-      [productId, amount, cartId]
+      "INSERT INTO cart_items (product_id, amount, cart_id, category) VALUES ($1, $2, $3, $4)",
+      [productId, amount, cartId, category]
     );
   }
 };

@@ -20,6 +20,9 @@ const OrderStackltem = ({
     await markOrderAsPaid(order!.id);
     setReload((prev: boolean) => !prev);
   };
+  const handleAddCustomer = async () => {
+    setReload((prev: boolean) => !prev);
+  };
   return (
     <>
       <li
@@ -34,7 +37,17 @@ const OrderStackltem = ({
             <strong>Ilość:</strong> <span>{totalItems}</span>
           </div>
           <div className="flex justify-between gap-8">
-            <strong>Klient:</strong> <span> {order.customer_id ?? "-"}</span>
+            <strong>Klient:</strong>
+            <span>
+              {order.customer_id ?? (
+                <button
+                  onClick={() => handleAddCustomer()}
+                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Dodaj klienta
+                </button>
+              )}
+            </span>
           </div>
         </div>
         <div className="space-y-1">
