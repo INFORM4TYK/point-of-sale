@@ -1,9 +1,18 @@
 import { Router } from "express";
-import { createOrderController, getOrderController } from "../controller/orderController";
+import {
+  createOrderController,
+  deleteOrderController,
+  getAllOrdersController,
+  getOrderByIdController,
+  updateOrderController,
+} from "../controller/orderController";
 
 const router = Router();
 
-router.post("/", createOrderController);      
-router.get("/:id", getOrderController);       
+router.get("/", getAllOrdersController);
+router.get("/:orderId", getOrderByIdController);
+router.post("/", createOrderController);
+router.put("/:orderId", updateOrderController);
+router.delete("/:orderId", deleteOrderController);
 
 export default router;

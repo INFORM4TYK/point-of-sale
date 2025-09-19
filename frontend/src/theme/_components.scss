@@ -1,11 +1,17 @@
+.btn {
+  font-weight: 500;
+  margin-top: 0.25rem;
+  border-radius: 10px;
+}
+
 .btn--primary {
-  font-weight: bold;
+  font-weight: 500;
   color: $text-white;
   margin-top: 0.25rem;
   border-radius: 10px;
 }
 .btn--negative {
-  font-weight: medium;
+  font-weight: 500;
   color: $danger-color;
   margin-top: 0.25rem;
   border-radius: 10px;

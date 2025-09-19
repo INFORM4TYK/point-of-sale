@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 import authRoutes from "./routes/authRoutes";
+import cartRoutes from "./routes/cartRouter";
+
 import productRoutes from "./routes/productRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import errorHandling from "./middleware/errorHandler";
@@ -20,6 +22,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
+
 app.use(errorHandling);
 
 app.listen(5001, () => console.log("Server running on port 5001"));

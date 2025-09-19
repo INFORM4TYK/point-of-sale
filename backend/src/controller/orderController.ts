@@ -1,26 +1,93 @@
-import { Request, Response } from "express";
-import { createOrder, getOrderById } from "../services/orderService";
+import { Request, Response, NextFunction } from "express";
+import {
+  createOrderService,
+  getOrderByIdService,
+  getAllOrdersService,
+  updateOrderService,
+  deleteOrderService,
+  addUserToOrderService,
+} from "../services/orderService";
 
-export const createOrderController = async (req: Request, res: Response) => {
+export const getAllOrdersController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { userId, items, total } = req.body;
-    if (!userId || !items || !total) {
-      return res.status(400).json({ message: "Missing fields" });
-    }
-
-    const order = await createOrder(userId, items, total);
-    res.status(201).json({ data: order });
+    const orders = await getAllOrdersService();
+    res.status(200).json({ data: orders });
   } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
+    next(err);
   }
 };
 
-export const getOrderController = async (req: Request, res: Response) => {
+export const getOrderByIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const orderId = parseInt(req.params.id);
-    const order = await getOrderById(orderId);
+    const orderId = Number(req.params.orderId);
+    const order = await getOrderByIdService(orderId);
     res.status(200).json({ data: order });
   } catch (err) {
-    res.status(500).json({ message: (err as Error).message });
+    next(err);
+  }
+};
+export const addCustomerToOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    const { customerId } = req.body;
+    const order = await addUserToOrderService(orderId, customerId);
+    res.status(200).json({ data: order });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const createOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { items, total } = req.body;
+    const order = await createOrderService(items, total);
+    res.status(201).json({ data: order, message: "Order created" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    const updates = req.body;
+    const order = await updateOrderService(orderId, updates);
+    res.status(200).json({ data: order, message: "Order updated" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    await deleteOrderService(orderId);
+    res.status(200).json({ message: "Order deleted" });
+  } catch (err) {
+    next(err);
   }
 };

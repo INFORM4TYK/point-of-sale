@@ -5,6 +5,14 @@ export interface Product {
   description: string;
   category: string;
   image: string;
-  rating_rate: number;
+  rating_rate: string;
   rating_count: number;
+  stock: number;
+}
+
+export interface CartProduct extends Product {
+  id: number;
+  cart_id: number;
+  product_id: number;
+  amount: number;
 }

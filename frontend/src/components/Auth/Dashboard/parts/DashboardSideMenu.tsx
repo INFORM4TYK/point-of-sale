@@ -1,24 +1,21 @@
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button, IconButton } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import useAuth from "../../../../hooks/useAuth";
 type SideMenuProps = {
   activeTab: string;
   setActiveTab: (tab: any) => void;
 };
-import MenuIcon from "@mui/icons-material/Menu";
 const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
   const tabs = [
     { key: "dashboard", label: "Panel Główny" },
-    { key: "pos", label: "POS" },
     { key: "products", label: "Produkty" },
     { key: "orders", label: "Zamówienia" },
     { key: "clients", label: "Klienci" },
-    { key: "settings", label: "Ustawienia" },
   ];
-  const currentUser = {
-    email: "example@gmail.com",
-  };
+  const { currentUser, logout } = useAuth();
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -27,9 +24,8 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
   }, []);
   const [open, setOpen] = useState(false);
   return (
-    <>
-      <div className="sm:hidden fixed top-4 right-4 z-20 bg-primary rounded-sm flex items-center px-2 py-1 gap-1">
-        <span className="text-white text-xs">Menu</span>
+    <section>
+      <div className="sm:hidden absolute top-5 right-5 z-20 bg-primary rounded-lg flex items-center px-2 py-1 gap-1">
         <IconButton
           onClick={() => setOpen((prev) => !prev)}
           sx={{ padding: 0 }}
@@ -58,11 +54,11 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
               <div className="sm:hidden">
                 <CloseIcon
                   onClick={() => setOpen(false)}
-                
                   sx={{ fontSize: "2rem !important" }}
                 />
               </div>
             </div>
+            <Divider />
             <section className="flex flex-col gap-2">
               {tabs.map((tab) => (
                 <button
@@ -86,7 +82,7 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
             <Button
               className="w-full"
               variant="outlined"
-              onClick={() => console.log("WYLOGUJ SIĘ")}
+              onClick={() => logout()}
               sx={{
                 color: "red",
                 borderColor: "red",
@@ -102,7 +98,7 @@ const DashboardSideMenu = ({ activeTab, setActiveTab }: SideMenuProps) => {
           </footer>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 
