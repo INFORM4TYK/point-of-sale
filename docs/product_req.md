@@ -1,6 +1,5 @@
 ## **Product Requirements Document (PRD)**
 
-```markdown
 # Product Requirements Document: Nazwa Projektu
 
 **Wersja:** 1.0
