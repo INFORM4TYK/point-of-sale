@@ -21,18 +21,15 @@ export const getOrderById = async (orderId: number): Promise<Order> => {
 
 export const createOrder = async ({
   customerId,
-  items,
-  total,
+  cartId
+
 }: {
+  cartId: string
   customerId?: number;
-  items: OrderItem[];
-  total: number;
 }): Promise<Order> => {
   try {
-    const { data } = await api.post<{ data: Order }>("/orders", {
+    const { data } = await api.post<{ data: Order }>(`/orders/${cartId}`, {
       customerId,
-      items,
-      total,
     });
     return data.data;
   } catch (err) {
@@ -70,3 +67,11 @@ export const deleteOrder = async (orderId: number): Promise<void> => {
     throw new Error("Failed to delete order");
   }
 };
+export const markOrderAsPaid = async (orderId: number): Promise<void> => {
+  try {
+    await api.put(`/orders/${orderId}/paid`);
+  } catch (err) {
+    throw new Error("Failed to update order");
+  }
+};
+

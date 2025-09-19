@@ -1,10 +1,18 @@
 import pool from "../config/db";
 import { OrderItem } from "../types/Order";
+import { getCartItems, getCartTotal } from "./cartModel";
 
-export const createOrder = async (items: OrderItem[], total: number) => {
+export const createOrder = async (cartId: number) => {
   const client = await pool.connect();
   try {
-    await client.query("BEGIN");
+
+    const cartItems = await getCartItems(cartId);
+
+    if (!cartItems || cartItems.length === 0) {
+      throw new Error("Cart is empty");
+    }
+
+    const total = await getCartTotal(cartId);
 
     const orderRes = await client.query(
       "INSERT INTO orders (customer_id, total) VALUES (NULL, $1) RETURNING *",
@@ -12,22 +20,24 @@ export const createOrder = async (items: OrderItem[], total: number) => {
     );
     const order = orderRes.rows[0];
 
-    for (const item of items) {
+    for (const item of cartItems) {
       await client.query(
-        "INSERT INTO order_items (order_id, product_id, amount, price) VALUES ($1, $2, $3, $4)",
-        [order.id, item.product_id, item.amount, item.price]
+        "INSERT INTO order_items (order_id, product_id, amount, price, category) VALUES ($1, $2, $3, $4, $5)",
+        [order.id, item.product_id, item.amount, item.price, item.category]
       );
     }
 
-    await client.query("COMMIT");
-    return getOrderById(order.id);
+
+    const fullOrder = await getOrderById(order.id);
+
+    return fullOrder;
   } catch (err) {
-    await client.query("ROLLBACK");
     throw err;
   } finally {
     client.release();
   }
 };
+
 export const addUserToOrder = async (orderId: number, customerId: number) => {
   const client = await pool.connect();
   try {
@@ -94,4 +104,14 @@ export const deleteOrder = async (orderId: number) => {
 export const getAllOrders = async () => {
   const res = await pool.query("SELECT * FROM orders ORDER BY created_at DESC");
   return res.rows;
+};
+export const markOrderAsPaid = async (orderId: number) => {
+  const res = await pool.query(
+    "UPDATE orders SET status = 'paid' WHERE id = $1 RETURNING *",
+    [orderId]
+  );
+
+  if (!res.rows[0]) throw new Error("Order not found");
+
+  return res.rows[0];
 };

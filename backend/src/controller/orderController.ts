@@ -6,6 +6,7 @@ import {
   updateOrderService,
   deleteOrderService,
   addUserToOrderService,
+  markOrderAsPaidService,
 } from "../services/orderService";
 
 export const getAllOrdersController = async (
@@ -16,6 +17,23 @@ export const getAllOrdersController = async (
   try {
     const orders = await getAllOrdersService();
     res.status(200).json({ data: orders });
+  } catch (err) {
+    next(err);
+  }
+};
+export const markOrderAsPaidController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId = Number(req.params.orderId);
+    if (!orderId || isNaN(orderId)) {
+      return res.status(400).json({ message: "Invalid order ID" });
+    }
+
+    const order = await markOrderAsPaidService(orderId);
+    res.status(200).json({ data: order });
   } catch (err) {
     next(err);
   }
@@ -55,8 +73,8 @@ export const createOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { items, total } = req.body;
-    const order = await createOrderService(items, total);
+    const cartId = Number(req.params.orderId);
+    const order = await createOrderService(cartId);
     res.status(201).json({ data: order, message: "Order created" });
   } catch (err) {
     next(err);
