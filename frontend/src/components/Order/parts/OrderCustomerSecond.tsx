@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { Autocomplete, TextField, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type Dispatch } from "react";
 import type { Customer } from "../../../types/Customer";
 import {
   searchCustomers,
@@ -14,10 +14,15 @@ type CustomerForm = {
   phone: string;
 };
 
-const OrderCustomer = ({ orderId }: { orderId: number }) => {
+const OrderCustomerSecond = ({
+  orderId,
+  setReload,
+}: {
+  orderId: number;
+  setReload: Dispatch<(prev: boolean) => boolean>;
+}) => {
   const {
     handleSubmit,
-    reset,
     control,
     setValue,
     formState: { errors },
@@ -59,6 +64,7 @@ const OrderCustomer = ({ orderId }: { orderId: number }) => {
         setSelectedCustomer(newCustomer);
         setSelectedCustomerId(newCustomer.id);
         await updateOrder({ orderId: orderId, customerId: newCustomer.id });
+        setReload((prev) => !prev);
       } catch (err) {
         console.error("Nie udało się dodać klienta:", err);
       }
@@ -67,29 +73,8 @@ const OrderCustomer = ({ orderId }: { orderId: number }) => {
     }
   };
 
-  const onChangeCustomer = () => {
-    setSelectedCustomer(null);
-    setSelectedCustomerId(null);
-    reset();
-    setSearchQuery("");
-  };
-
   if (selectedCustomer) {
-    return (
-      <div className="p-4 bg-white rounded shadow space-y-3">
-        <h3 className="font-semibold">Wybrany klient:</h3>
-        <p>Imię i nazwisko: {selectedCustomer.name}</p>
-        <p>Email: {selectedCustomer.email}</p>
-        <p>Telefon: {selectedCustomer.phone}</p>
-        <button
-          type="button"
-          onClick={onChangeCustomer}
-          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-        >
-          Zmień klienta
-        </button>
-      </div>
-    );
+    return;
   }
 
   return (
@@ -118,6 +103,7 @@ const OrderCustomer = ({ orderId }: { orderId: number }) => {
                 updateOrder({ orderId, customerId: value.id }).catch(
                   console.error
                 );
+                setReload((prev) => !prev);
               }
             }}
             renderInput={(params) => (
@@ -170,4 +156,4 @@ const OrderCustomer = ({ orderId }: { orderId: number }) => {
   );
 };
 
-export default OrderCustomer;
+export default OrderCustomerSecond;
