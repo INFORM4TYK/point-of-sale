@@ -7,14 +7,15 @@ import {
   clearCartController,
   getCartTotalController,
 } from "../controller/cartController";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/:cartId", getCartItemsController);
-router.post("/:cartId", addCartItemController);
-router.put("/:cartId", updateCartItemController);
-router.delete("/:cartId/product/:productId", removeCartItemController);
-router.delete("/:cartId", clearCartController);
-router.get("/total/:cartId", getCartTotalController);
+router.get("/:cartId",authMiddleware,  getCartItemsController);
+router.post("/:cartId",authMiddleware,  addCartItemController);
+router.put("/:cartId", authMiddleware, updateCartItemController);
+router.delete("/:cartId/product/:productId",authMiddleware,  removeCartItemController);
+router.delete("/:cartId",authMiddleware,  clearCartController);
+router.get("/total/:cartId",authMiddleware, getCartTotalController);
 
 export default router;

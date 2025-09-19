@@ -9,14 +9,15 @@ import {
 } from "../controller/customerController";
 import { customerSchema } from "../validators/validate";
 import { validateBody } from "../middleware/validate";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.post("/", validateBody(customerSchema), addCustomerController);
-router.get("/", getAllCustomersController);
-router.get("/search", searchCustomersController);
-router.get("/:id", getCustomerByIdController);
-router.put("/:id", updateCustomerController);
-router.delete("/:id", deleteCustomerController);
+router.post("/", validateBody(customerSchema),authMiddleware,  addCustomerController);
+router.get("/", authMiddleware, getAllCustomersController);
+router.get("/search", authMiddleware, searchCustomersController);
+router.get("/:id", authMiddleware, getCustomerByIdController);
+router.put("/:id", authMiddleware, updateCustomerController);
+router.delete("/:id",authMiddleware,  deleteCustomerController);
 
 export default router;
