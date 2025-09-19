@@ -18,16 +18,18 @@ const OrderItem = ({ item }: { item: OrderItemEnriched }) => {
           alt="test"
         />
       </div>
-      <span className="flex-1  font-medium text-xm sm:text-base">
+      <span className="flex-1 font-medium text-xm sm:text-base">
         {item.title}
       </span>
-      <span className="text-sm">Ilość: {item.amount}</span>
-      <Divider orientation="vertical" flexItem />
-      <span className="text-sm">Cena: ${normalizedPrice}</span>
-      <Divider orientation="vertical" flexItem />
-      <span className="text-sm font-semibold">
-        Razem: ${normalizedTotalPrice}
-      </span>
+      <div className="space-y-2">
+        <span className="text-sm">Ilość: {item.amount}</span>
+        <Divider flexItem />
+        <span className="text-sm">Cena: {normalizedPrice} PLN</span>
+        <Divider flexItem />
+        <span className="text-sm font-semibold">
+          Razem: {normalizedTotalPrice} PLN
+        </span>
+      </div>
     </li>
   );
 };
