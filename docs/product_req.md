@@ -1,17 +1,15 @@
 ## **Product Requirements Document (PRD)**
 
-# Product Requirements Document: Nazwa Projektu
+# Product Requirements Document: POS
 
 **Wersja:** 1.0
 **Data:** 19.09.2025
 
 ## 1. Wprowadzenie i cel
 
-Opisz cel produktu. Jaki problem rozwiązuje? Jaka jest wizja i dla kogo jest ten produkt?
+Produkt ma na celu ułatwienie zarządzania zamówieniami i procesami w sklepie, eliminując ręczne śledzenie i chaos informacyjny.
 
 ## 2. Kluczowe funkcjonalności
-
-Wylistuj główne funkcje produktu. Każda funkcja powinna mieć krótki opis.
 
 -   **Rejestracja i logowanie użytkowników:** Umożliwienie logowania się do aplikacji za pomocą wcześniej stworzonego loginu i hasła.
 -   **Zarządzanie sprzedażą:** Użyktownik może tworzyć zamówienie oraz przeglądać produkty.

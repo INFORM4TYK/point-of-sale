@@ -5,7 +5,6 @@
 
 ## 1. Architektura systemu
 
-Opis ogólnej architektury. W tym przypadku będzie to architektura Klient-Serwer. Można tu umieścić diagram architektury.
 
 -   **Frontend:** Aplikacja z interfejsem zbudowana w React.
 -   **Backend:** Aplikacja REST API zbudowana w Node.js i Express.
