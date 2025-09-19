@@ -11,7 +11,7 @@ const router = Router();
 
 router.get("/", getAllOrdersController);
 router.get("/:orderId", getOrderByIdController);
-router.post("/", createOrderController);
+router.post("/:orderId", createOrderController);
 router.put("/:orderId", updateOrderController);
 router.delete("/:orderId", deleteOrderController);
 

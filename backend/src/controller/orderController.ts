@@ -55,8 +55,8 @@ export const createOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { items, total } = req.body;
-    const order = await createOrderService(items, total);
+    const cartId = Number(req.params.orderId);
+    const order = await createOrderService(cartId);
     res.status(201).json({ data: order, message: "Order created" });
   } catch (err) {
     next(err);

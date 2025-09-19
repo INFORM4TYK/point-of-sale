@@ -6,17 +6,15 @@ import {
   deleteOrder,
   addUserToOrder,
 } from "../models/orderModel";
-import { Order, OrderItem } from "../types/Order";
+import { Order } from "../types/Order";
 import { HttpError } from "../utils/httpError";
 
-export const createOrderService = async (
-  items: OrderItem[],
-  total: number
-): Promise<Order> => {
+export const createOrderService = async (cartId: number): Promise<Order> => {
+   if (!cartId || isNaN(cartId)) throw new HttpError(400, "Invalid cart ID");
   try {
-    return await createOrder(items, total);
+    return await createOrder(cartId);
   } catch (err) {
-    throw new HttpError(500, "order/failed-create");
+    throw new Error(`Failed to create order: ${err}`);
   }
 };
 export const addUserToOrderService = async (

@@ -21,18 +21,15 @@ export const getOrderById = async (orderId: number): Promise<Order> => {
 
 export const createOrder = async ({
   customerId,
-  items,
-  total,
+  cartId
+
 }: {
+  cartId: string
   customerId?: number;
-  items: OrderItem[];
-  total: number;
 }): Promise<Order> => {
   try {
-    const { data } = await api.post<{ data: Order }>("/orders", {
+    const { data } = await api.post<{ data: Order }>(`/orders/${cartId}`, {
       customerId,
-      items,
-      total,
     });
     return data.data;
   } catch (err) {

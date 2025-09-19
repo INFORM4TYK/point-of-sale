@@ -1,33 +1,52 @@
 import pool from "../config/db";
 import { OrderItem } from "../types/Order";
+import { getCartItems, getCartTotal } from "./cartModel";
 
-export const createOrder = async (items: OrderItem[], total: number) => {
+export const createOrder = async (cartId: number) => {
   const client = await pool.connect();
   try {
-    await client.query("BEGIN");
+    console.log("🔥 Tworzymy zamówienie dla cartId:", cartId);
+
+    const cartItems = await getCartItems(cartId);
+    console.log("🛒 Produkty w koszyku:", cartItems);
+
+    if (!cartItems || cartItems.length === 0) {
+      console.log("⚠️ Koszyk pusty!");
+      throw new Error("Cart is empty");
+    }
+
+    const total = await getCartTotal(cartId);
+    console.log("💰 Total do zapłaty:", total);
 
     const orderRes = await client.query(
       "INSERT INTO orders (customer_id, total) VALUES (NULL, $1) RETURNING *",
       [total]
     );
     const order = orderRes.rows[0];
+    console.log("✅ Zamówienie utworzone:", order);
 
-    for (const item of items) {
+    for (const item of cartItems) {
+      console.log("➕ Dodajemy item do order_items:", item);
       await client.query(
         "INSERT INTO order_items (order_id, product_id, amount, price) VALUES ($1, $2, $3, $4)",
         [order.id, item.product_id, item.amount, item.price]
       );
     }
 
-    await client.query("COMMIT");
-    return getOrderById(order.id);
+    console.log("🎉 Wszystkie pozycje dodane do zamówienia");
+
+    const fullOrder = await getOrderById(order.id);
+    console.log("📦 Zamówienie finalne:", fullOrder);
+
+    return fullOrder;
   } catch (err) {
-    await client.query("ROLLBACK");
+    console.error("❌ Błąd przy tworzeniu zamówienia:", err);
     throw err;
   } finally {
     client.release();
   }
 };
+
 export const addUserToOrder = async (orderId: number, customerId: number) => {
   const client = await pool.connect();
   try {

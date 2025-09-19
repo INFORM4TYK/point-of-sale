@@ -4,6 +4,7 @@ import CartItem from "./CartItem/CartItem";
 
 const CartItemsList = () => {
   const { cart: products, activeCart } = useCart();
+  console.log("💀 ~ CartItemsList ~ products:", products)
   return (
     <div className="space-y-2">
       {products?.length > 0 ? (
