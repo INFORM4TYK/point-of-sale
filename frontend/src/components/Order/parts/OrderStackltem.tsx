@@ -4,7 +4,9 @@ import OrderItem from "./OrderItem";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { markOrderAsPaid } from "../../../services/orderService";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import type { Dispatch } from "react";
+import { useEffect, useState, type Dispatch } from "react";
+import type { Customer } from "../../../types/Customer";
+import { getCustomerById } from "../../../services/customerService";
 
 const OrderStackltem = ({
   order,
@@ -23,6 +25,26 @@ const OrderStackltem = ({
   const handleAddCustomer = async () => {
     setReload((prev: boolean) => !prev);
   };
+  const [customer, setCustomer] = useState<Customer | null>();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      setLoading(true);
+      try {
+        if (order.customer_id) {
+          const allCustomer = await getCustomerById(order.customer_id);
+
+          setCustomer(allCustomer);
+        }
+      } catch (err) {
+        console.error("Failed to fetch customers", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCustomers();
+  }, []);
+
   return (
     <>
       <li
@@ -39,7 +61,11 @@ const OrderStackltem = ({
           <div className="flex justify-between gap-8">
             <strong>Klient:</strong>
             <span>
-              {order.customer_id ?? (
+              {!loading && order.customer_id ? (
+                <>
+                  <div>{customer?.name}</div>
+                </>
+              ) : (
                 <button
                   onClick={() => handleAddCustomer()}
                   className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"

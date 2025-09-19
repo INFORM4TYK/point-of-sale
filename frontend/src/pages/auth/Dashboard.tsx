@@ -3,6 +3,7 @@ import DashboardContent from "../../components/Auth/Dashboard/DashboardContent";
 import ProductList from "../../components/Products/ProductList";
 import DashboardSideMenu from "../../components/Auth/Dashboard/parts/DashboardSideMenu";
 import Orders from "../../components/Order/Orders";
+import Customers from "../../components/Customers/Customers";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<
@@ -19,7 +20,7 @@ const Dashboard = () => {
       case "orders":
         return <Orders />;
       case "clients":
-        return <div>Witamy w klienci</div>;
+        return <Customers />;
       default:
         return <DashboardContent />;
     }

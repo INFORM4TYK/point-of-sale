@@ -38,11 +38,14 @@ const DashboardStatItem = ({
     <div className="flex-1 h-full min-w-[200px] border-2 flex flex-col p-2 lg:px-6 lg:py-4 rounded-xl gap-2">
       <div className="flex items-center gap-2">
         <IconComponent className="text-gray-400" />
-        <p className="text-gray-600 text-sm lg:text-base font-semibold">{title}</p>
+        <p className="text-gray-600 text-sm lg:text-base font-semibold">
+          {title}
+        </p>
       </div>
       <div className="flex items-center gap-2">
         <p className="text-2xl text-textDark font-bold">
-          {!loading ? stats : <CircularProgress sx={{ fontSize: ".2rem" }} />}
+          {!loading ? stats : <CircularProgress sx={{ fontSize: ".2rem" }} />}{" "}
+          <span>{icon === "money" && "PLN"}</span>
         </p>
       </div>
     </div>

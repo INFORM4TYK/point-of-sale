@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useCart from "../../hooks/useCart";
-import { createOrder, getOrderById } from "../../services/orderService";
-import type { Order, OrderItem as OrderItemType } from "../../types/Order";
+import { createOrder } from "../../services/orderService";
+import type { Order } from "../../types/Order";
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import OrderItem from "./parts/OrderItem";
@@ -53,12 +53,12 @@ const OrderDetails = ({ id }: { id: string | null }) => {
           <h3 className="font-semibold mb-2">Produkty:</h3>
           <ul className="divide-y divide-gray-200">
             {order.items.map((item) => {
-              return <OrderItem item={item}  />;
+              return <OrderItem item={item} />;
             })}
           </ul>
         </div>
 
-        <OrderCustomer />
+        <OrderCustomer orderId={order.id} />
         <OrderActions id={order.id} />
       </div>
     </div>

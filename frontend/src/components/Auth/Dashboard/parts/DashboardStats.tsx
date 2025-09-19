@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardStatItem from "./DashboardStatItem";
 import { getAllOrders, getOrderById } from "../../../../services/orderService";
 import Decimal from "decimal.js";
+import { getAllCustomers } from "../../../../services/customerService";
 
 const DashboardStats = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ const DashboardStats = () => {
       setLoading(true);
       try {
         const ordersSummary = await getAllOrders();
+        const customers = await getAllCustomers();
         const ordersWithItems = await Promise.all(
           ordersSummary.map((order) => getOrderById(order.id))
         );
@@ -34,6 +36,7 @@ const DashboardStats = () => {
             )
           );
         }, 0);
+        setCustomers(customers.length);
         const normalizedPrice = new Decimal(totalMoney).div(100).toFixed(2);
         setMoney(normalizedPrice);
         setOrders(ordersSummary.length ?? 0);

@@ -3,7 +3,7 @@ import type { Customer } from "../types/Customer";
 
 export const addCustomer = async (customer: {
   name: string;
-  phone: number;
+  phone: string;
   email: string;
 }): Promise<Customer> => {
   try {
@@ -23,10 +23,10 @@ export const getAllCustomers = async (): Promise<Customer[]> => {
   }
 };
 
-export const searchCustomers = async (query: string): Promise<Customer[]> => {
+export const searchCustomers = async (q: string): Promise<Customer[]> => {
   try {
     const { data } = await api.get<{ data: Customer[] }>(`/customers/search`, {
-      params: { query },
+      params: { q },
     });
     return data.data;
   } catch (err) {
@@ -45,7 +45,7 @@ export const getCustomerById = async (id: number): Promise<Customer> => {
 
 export const updateCustomer = async (
   id: number,
-  updates: { name?: string; phone?: number; email?: string }
+  updates: { name?: string; phone?: string; email?: string }
 ): Promise<Customer> => {
   try {
     const { data } = await api.put<{ data: Customer }>(

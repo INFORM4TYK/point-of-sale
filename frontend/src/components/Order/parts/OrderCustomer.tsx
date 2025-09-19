@@ -1,6 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { Autocomplete, TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import type { Customer } from "../../../types/Customer";
+import {
+  searchCustomers,
+  addCustomer,
+} from "../../../services/customerService";
+import { updateOrder } from "../../../services/orderService";
 
 type CustomerForm = {
   name: string;
@@ -8,38 +14,64 @@ type CustomerForm = {
   phone: string;
 };
 
-const dummyCustomers = [
-  { id: 1, name: "Jan Kowalski", email: "jan@test.com", phone: "123456789" },
-  { id: 2, name: "Anna Nowak", email: "anna@test.com", phone: "987654321" },
-  {
-    id: 3,
-    name: "Piotr Wiśniewski",
-    email: "piotr@test.com",
-    phone: "555555555",
-  },
-];
-
-const OrderCustomer = () => {
+const OrderCustomer = ({ orderId }: { orderId: number }) => {
   const {
-    register,
     handleSubmit,
     reset,
     control,
     setValue,
     formState: { errors },
   } = useForm<CustomerForm>();
-  const [selectedCustomer, setSelectedCustomer] = useState<CustomerForm | null>(
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
+    null
+  );
+  const [searchResults, setSearchResults] = useState<Customer[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const onAddCustomer = (data: CustomerForm) => {
-    setSelectedCustomer(data);
-    console.log("💀 ~ Customer added:", data);
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearchResults([]);
+      return;
+    }
+    const timeout = setTimeout(async () => {
+      try {
+        const results = await searchCustomers(searchQuery);
+        setSearchResults(results);
+      } catch (err) {
+        console.error(err);
+        setSearchResults([]);
+      }
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
+
+  const onAddCustomer = async (data?: CustomerForm) => {
+    if (data && !selectedCustomerId) {
+      try {
+        const newCustomer = await addCustomer({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+        });
+        setSelectedCustomer(newCustomer);
+        setSelectedCustomerId(newCustomer.id);
+        await updateOrder({ orderId: orderId, customerId: newCustomer.id });
+      } catch (err) {
+        console.error("Nie udało się dodać klienta:", err);
+      }
+    } else if (selectedCustomerId) {
+      await updateOrder({ orderId: orderId, customerId: selectedCustomerId });
+    }
   };
 
   const onChangeCustomer = () => {
     setSelectedCustomer(null);
+    setSelectedCustomerId(null);
     reset();
+    setSearchQuery("");
   };
 
   if (selectedCustomer) {
@@ -72,15 +104,20 @@ const OrderCustomer = () => {
         control={control}
         render={({ field }) => (
           <Autocomplete
-            options={dummyCustomers}
+            options={searchResults}
             getOptionLabel={(option) => option.name}
             value={selectedCustomer}
-            onChange={(_, value) => {
+            onInputChange={(_, value) => setSearchQuery(value)}
+            onChange={(_, value: any) => {
               if (value) {
                 setSelectedCustomer(value);
+                setSelectedCustomerId(value.id);
                 setValue("name", value.name);
                 setValue("email", value.email);
                 setValue("phone", value.phone);
+                updateOrder({ orderId, customerId: value.id }).catch(
+                  console.error
+                );
               }
             }}
             renderInput={(params) => (
@@ -95,7 +132,7 @@ const OrderCustomer = () => {
 
       <p className="text-sm text-gray-500">Lub wpisz ręcznie</p>
       <input
-        {...register("name", { required: "Pole imię jest wymagane" })}
+        {...control.register?.("name", { required: "Pole imię jest wymagane" })}
         placeholder="Imię i nazwisko"
         className="w-full p-2 border rounded"
       />
@@ -104,7 +141,9 @@ const OrderCustomer = () => {
       )}
 
       <input
-        {...register("email", { required: "Pole email jest wymagane" })}
+        {...control.register?.("email", {
+          required: "Pole email jest wymagane",
+        })}
         type="email"
         placeholder="Email"
         className="w-full p-2 border rounded"
@@ -114,7 +153,9 @@ const OrderCustomer = () => {
       )}
 
       <input
-        {...register("phone", { required: "Pole telefon jest wymagane" })}
+        {...control.register?.("phone", {
+          required: "Pole telefon jest wymagane",
+        })}
         placeholder="Telefon"
         className="w-full p-2 border rounded"
       />
@@ -122,12 +163,9 @@ const OrderCustomer = () => {
         <p className="text-red-500 text-sm">{errors.phone.message}</p>
       )}
 
-      <button
-        type="submit"
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
+      <Button type="submit" variant="contained" color="primary">
         Dodaj klienta
-      </button>
+      </Button>
     </form>
   );
 };
