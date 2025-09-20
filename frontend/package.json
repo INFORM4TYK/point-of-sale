@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- "scripts": {
+"scripts": {
   "dev": "vite",
   "prod": "NODE_ENV=production vite build",
   "build": "tsc -b && vite build",
   "lint": "eslint .",
-  "preview": "vite preview"
+  "preview": "vite preview",
+  "serve": "serve -s dist -l 3000"
 },
   "dependencies": {
     "@emotion/react": "^11.14.0",
