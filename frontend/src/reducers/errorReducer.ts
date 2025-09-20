@@ -26,7 +26,7 @@ export type ErrorAction =
   | { type: "orders/failed-to-mark-paid" }
   | { type: "orders/failed-to-assign-user" };
 
-const errorReducer = (state: ErrorState, action: ErrorAction): ErrorState => {
+const errorReducer = (_state: ErrorState, action: ErrorAction): ErrorState => {
   switch (action.type) {
     case "reset":
       return { error: "" };
