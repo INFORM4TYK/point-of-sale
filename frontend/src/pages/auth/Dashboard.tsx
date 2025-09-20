@@ -4,10 +4,14 @@ import ProductList from "../../components/Products/ProductList";
 import DashboardSideMenu from "../../components/Auth/Dashboard/parts/DashboardSideMenu";
 import Orders from "../../components/Order/Orders";
 import Customers from "../../components/Customers/Customers";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Dashboard = () => {
-    const location = useLocation();
+  const location = useLocation();
+  const router = useNavigate();
+  const { currentUser, loadingUser } = useAuth();
+
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "pos" | "products" | "orders" | "clients" | "settings"
   >("dashboard");
@@ -40,6 +44,10 @@ const Dashboard = () => {
         return <DashboardContent />;
     }
   };
+  if (!loadingUser && !currentUser) {
+    router("/auth", { replace: true });
+    return;
+  }
   return (
     <div className="w-full h-screen flex">
       <DashboardSideMenu activeTab={activeTab} setActiveTab={setActiveTab} />
