@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-dotenv.config();
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+dotenv.config({ path: envFile });
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createUserService, getUserByEmailService } from "../models/userModel";

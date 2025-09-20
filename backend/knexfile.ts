@@ -1,7 +1,9 @@
-import { Knex } from "knex";
+import type { Knex } from "knex";
 import dotenv from "dotenv";
 
-dotenv.config();
+const envFile =
+  process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+dotenv.config({ path: envFile });
 
 const config: { [key: string]: Knex.Config } = {
   development: {
@@ -15,10 +17,21 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       directory: "./src/migrations",
-      extension: "ts"
-    }
-  }
+      extension: "ts",
+    },
+  },
+
+  production: {
+    client: "pg",
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    },
+    migrations: {
+      directory: "./src/migrations",
+      extension: "ts",
+    },
+  },
 };
 
 export default config;
-

@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+dotenv.config({ path: envFile });
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -10,9 +13,12 @@ import orderRoutes from "./routes/orderRoutes";
 import errorHandling from "./middleware/errorHandler";
 
 const app = express();
+
+
+    
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.BASE_URL,
     credentials: true,
   })
 );
@@ -28,6 +34,6 @@ app.use("/api/customers", customersRoutes);
 
 app.use(errorHandling);
 
-app.listen(5001, () => console.log("Server running on port 5001"));
+app.listen(5001, () => console.log(`Server running on port 5001 and ${process.env.NODE_ENV}`));
 
 export default app;

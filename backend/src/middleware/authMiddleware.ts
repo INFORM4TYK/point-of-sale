@@ -1,5 +1,9 @@
 import dotenv from "dotenv";
-dotenv.config();
+
+const envFile =
+  process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+dotenv.config({ path: envFile });
+
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET!;
