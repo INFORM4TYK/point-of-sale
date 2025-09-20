@@ -80,7 +80,7 @@ const OrderCustomerSecond = ({
   return (
     <form
       onSubmit={handleSubmit(onAddCustomer)}
-      className="mb-6 p-2 sm:p-4 bg-white rounded shadow space-y-3"
+      className="mb-6 p-2 sm:p-4 bg-white rounded shadow space-y-3 min-w-[300px]"
     >
       <h3 className="font-semibold">Wyszukaj klienta:</h3>
 
