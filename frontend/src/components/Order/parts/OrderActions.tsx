@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { markOrderAsPaid } from "../../../services/orderService";
 const OrderActions = ({ id }: { id: number }) => {
+  const router = useNavigate()
   return (
     <div className="flex gap-2 justify-end">
       {/* <button
@@ -8,7 +10,7 @@ const OrderActions = ({ id }: { id: number }) => {
         Anuluj
       </button> */}
       <button
-        onClick={() => markOrderAsPaid(id)}
+        onClick={() => {markOrderAsPaid(id).then(() => router('/dashboard?tab=orders'))}}
         className="px-4 py-2 bg-green-500 max-w-[400px] w-full text-white rounded hover:bg-green-600"
       >
         Realizuj
