@@ -1,4 +1,12 @@
+## Strona Frontend
+
+Możesz odwiedzić działającą wersję pod tym adresem:  
+
+[**Point of Sale – Frontend**](https://point-of-sale-sable-two.vercel.app/)
+
 # Dane logowania
+
+
 
 ```
 Email: admin@gmail.com
