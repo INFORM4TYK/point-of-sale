@@ -2,7 +2,7 @@
 
 Możesz odwiedzić działającą wersję pod tym adresem:  
 
-[**Point of Sale – Frontend**](https://point-of-sale-sable-two.vercel.app/)
+  (SERWER WYŁĄCZONY)
 
 # Dane logowania
 
